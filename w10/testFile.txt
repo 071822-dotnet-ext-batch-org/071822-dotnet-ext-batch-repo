@@ -1,3 +1,3 @@
 This is a test that has been edited.
-another line
+another conf line
 hey there/....
