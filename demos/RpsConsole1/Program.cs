@@ -133,8 +133,35 @@ namespace RpsConsole1
             //a for-loop wil iterate over each element of an array. you can do somethin at each element.
             for (int i = 0; i < myCharArr.Length; i++)
             {
-                Console.WriteLine($"The element value is {myCharArr[i]}");
+                // Console.WriteLine($"The element value is {myCharArr[i]}");// the line terminator is '\n'
+                Console.Write($"{myCharArr[i]}");
             }
+            Console.WriteLine();
+
+            string myString3 = "Marky";
+            // the foreach loop will automatically break out of the loop at the end of the array.
+            foreach (char x1 in myCharArr)
+            {
+                //Console.Write($"{myCharArr[x]}");
+                Console.Write($"{x1}.");
+            }
+
+            //a while loop will keep iterating untill the comparison is false
+            int w = 113;
+            while (w > 100)
+            {
+                Console.Write($"Mark.");
+                w--;
+            }
+            Console.WriteLine();
+
+            //a do-while loop will keep iterating until the comparison is false. I will iterate AT LEAST once.
+            do
+            {
+                Console.Write($"Mark in a do-while.\n");
+                w++;
+            } while (w < 113);
+            Console.WriteLine();
 
 
 
