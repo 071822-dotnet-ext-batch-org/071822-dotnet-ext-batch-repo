@@ -53,104 +53,87 @@ namespace RpsConsole2
                 int player1wins = 0;//how many rounds p1 has won
                 int computerWins = 0;//how many rounds the compouter has won
                 int numberOfTies = 0;//how many ties there have been
-                string player1ChoiceStr;
-                bool successfulConversion = false;
+                //string player1ChoiceStr;
+                //bool successfulConversion = false;
                 string playAgain = "";// this hold the users answer for if they want to play again.
 
                 // get the users name
                 Console.WriteLine("What is your first and last name?");
                 gameplay.P1Name(Console.ReadLine().Split(" "));
 
-                // Console.WriteLine("What is your last name?");
-                // game.P1.Lname = Console.ReadLine();
-
                 Console.WriteLine($"Welcome to R-P-S Game, {gameplay.GetP1().Fname} {gameplay.GetP1().Lname}.");
 
                 //a while loop to play rounds till one player has 2 rounds won.
                 while (gameplay.IsThereAWinner())// the Game object will have a method that will calculate if there is a winner.
                 {
-                    //create a Round
-                    Round round = new Round();
-
-                    //assign the players to the round. They are already in the game instance.
-                    round.P1 = game.P1;
-                    round.P2 = game.P2;
-
+                    //call PlayGame to create a round and add the current games players to it.
+                    gameplay.PlayRound();
                     //keep prompting till the user puts in the correct option range
                     do
                     {
-                        // get the users choice
                         Console.WriteLine("Please enter...\n\t1 for Rock.\n\t2 for Paper.\n\t3 for Scissors.");
-                        player1ChoiceStr = Console.ReadLine();
 
-                        successfulConversion = Int32.TryParse(player1ChoiceStr, out int player1Choice);// store these choices on the round object
-
-                        if (successfulConversion && player1Choice < 4 && player1Choice > 0)
-                        {
-                            //we need to convert the player1choice to the equivalent GamePiece type adn add it to the round data
-                            round.P1Choice = (GamePiece)player1Choice;
-                            break;
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Please enter a correct number. Either 1, 2, or 3.");
-                        }
-
+                        //call .ValidateUserChoice()
+                        bool successfulConversion = gameplay.ValidateUserChoice(Console.ReadLine());
+                        if (successfulConversion) break;
+                        else Console.WriteLine($"Please enter a correct number. Either 1, 2, or 3.");
                     } while (true);// this is an infinite loop.
 
-                    // get the computers random choice and add it to the round data
-                    round.P2Choice = (GamePiece)(rand.Next(1000) % 3) + 1;// store this on the Round object
 
-                    // evaluate the choices to determine the winner of the round.
-                    // if it was a tie
-                    if (round.P1Choice == round.P2Choice)
-                    {
-                        // tell them it was a tie and loop back up to the top to reprompt
-                        Console.WriteLine($"This round was a tie!... Let's try again.");
-                        // update the tally for this gaming session of how many games the computer and the user have won.
-                        numberOfTies++;// ++ increments the int by exactly 1.
+                    // evaluate the round.
+                    int roundWinner = gameplay.EvaluatePlayersChoices();
 
-                        //update the roundwinner in the Round
-                        round.RoundWinner = 0;
-                        //add the round to the game List<>
-                        game.Rounds.Add(round);
-                        // add the round to the List of rounds
-                        rounds.Add(round);
-                    }
-                    // if the user won
-                    else if ((round.P1Choice == GamePiece.ROCK && round.P2Choice == GamePiece.SCISSORS) ||
-                                (round.P1Choice == GamePiece.PAPER && round.P2Choice == GamePiece.ROCK) ||
-                                    (round.P1Choice == GamePiece.SCISSORS && round.P2Choice == GamePiece.PAPER))
-                    {
-                        Console.WriteLine($"Congrats, {game.P1.Fname}, you won this round.");
-                        // update the tally for this gaming session of how many games the computer and the user have won.
 
-                        //maybe have local variables to store this data temporarily?
-                        player1wins = player1wins + 1;// this method gives you the option of incrementing by more than 1
+                    // // evaluate the choices to determine the winner of the round.
+                    // // if it was a tie
+                    // if (round.P1Choice == round.P2Choice)
+                    // {
+                    //     // tell them it was a tie and loop back up to the top to reprompt
+                    //     Console.WriteLine($"This round was a tie!... Let's try again.");
+                    //     // update the tally for this gaming session of how many games the computer and the user have won.
+                    //     numberOfTies++;// ++ increments the int by exactly 1.
 
-                        //update the roundwinner in the Round
-                        round.RoundWinner = 1;
-                        //add the round to the game List<>
-                        game.Rounds.Add(round);
-                        // add the round to the List of rounds
-                        rounds.Add(round);
+                    //     //update the roundwinner in the Round
+                    //     round.RoundWinner = 0;
+                    //     //add the round to the game List<>
+                    //     game.Rounds.Add(round);
+                    //     // add the round to the List of rounds
+                    //     rounds.Add(round);
+                    // }
+                    // // if the user won
+                    // else if ((round.P1Choice == GamePiece.ROCK && round.P2Choice == GamePiece.SCISSORS) ||
+                    //             (round.P1Choice == GamePiece.PAPER && round.P2Choice == GamePiece.ROCK) ||
+                    //                 (round.P1Choice == GamePiece.SCISSORS && round.P2Choice == GamePiece.PAPER))
+                    // {
+                    //     Console.WriteLine($"Congrats, {game.P1.Fname}, you won this round.");
+                    //     // update the tally for this gaming session of how many games the computer and the user have won.
 
-                    }
-                    //if the computer won
-                    else
-                    {// if the computer won
-                        Console.WriteLine($"I'm sorry, {game.P2.Fname} won this round.");
-                        // update the tally for this gaming session of how many games the computer and the user have won.
-                        computerWins += 1;// this method gives you the option of incrementing by more than 1.
-                                          //isTie = false;
+                    //     //maybe have local variables to store this data temporarily?
+                    //     player1wins = player1wins + 1;// this method gives you the option of incrementing by more than 1
 
-                        //update the roundwinner in the Round
-                        round.RoundWinner = 2;
-                        //add the round to the game List<>
-                        game.Rounds.Add(round);
-                        // add the round to the List of rounds
-                        rounds.Add(round);
-                    }
+                    //     //update the roundwinner in the Round
+                    //     round.RoundWinner = 1;
+                    //     //add the round to the game List<>
+                    //     game.Rounds.Add(round);
+                    //     // add the round to the List of rounds
+                    //     rounds.Add(round);
+
+                    // }
+                    // //if the computer won
+                    // else
+                    // {// if the computer won
+                    //     Console.WriteLine($"I'm sorry, {game.P2.Fname} won this round.");
+                    //     // update the tally for this gaming session of how many games the computer and the user have won.
+                    //     computerWins += 1;// this method gives you the option of incrementing by more than 1.
+                    //                       //isTie = false;
+
+                    //     //update the roundwinner in the Round
+                    //     round.RoundWinner = 2;
+                    //     //add the round to the game List<>
+                    //     game.Rounds.Add(round);
+                    //     // add the round to the List of rounds
+                    //     rounds.Add(round);
+                    // }
 
                     Console.WriteLine($"\n\tYou chose {round.P1Choice}.\n\tThe {game.P2.Fname} chose {round.P2Choice}.\n");
                     Console.WriteLine($"\tIn this game:\nYou have won {player1wins} rounds,\nThe computer has won {computerWins} rounds, and\nThere have been {numberOfTies} ties.\n\n");

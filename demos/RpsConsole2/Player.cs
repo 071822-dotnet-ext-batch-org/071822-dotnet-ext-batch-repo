@@ -49,9 +49,10 @@ namespace RpsConsole2
         public Player() { }
 
         //parameterized constructor
-        public Player(string fname)
+        public Player(string fname, string lname)
         {
             this.Fname = fname;
+            this.Lname = lname;
         }
 
         // methods are sets of consecutive steps that the program completes. the can be called indiviudally.
