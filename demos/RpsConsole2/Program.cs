@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RpsConsole2
 {
@@ -23,16 +24,17 @@ namespace RpsConsole2
                         Console.WriteLine($"{p1.Fname} has {p1.Wins} wins");
             */
 
+            // Random rand = new Random();// the Random class gets us a pseudorandom decimal between 0 and 1.
 
-            Random rand = new Random();// the Random class gets us a pseudorandom decimal between 0 and 1.
+            // // These List<>'s are analogous to saving the data permanently in a Db. (We aren't doing that... YET.)
+            // //create a List<Game> to hold all the games
+            // List<Game> games = new List<Game>();
+            // // create a List<Player> to hold allthe players.
+            // List<Player> players = new List<Player>();
+            // // create a List<Round> to hold all the Rounds
+            // List<Round> rounds = new List<Round>();
 
-            // These List<>'s are analogous to saving the data permanently in a Db. (We aren't doing that... YET.)
-            //create a List<Game> to hold all the games
-            List<Game> games = new List<Game>();
-            // create a List<Player> to hold allthe players.
-            List<Player> players = new List<Player>();
-            // create a List<Round> to hold all the Rounds
-            List<Round> rounds = new List<Round>();
+            GamePlay gameplay = new GamePlay();
 
             // Welcome message...
             Console.WriteLine("\t\tWelcome to you favorite game!\n\t\tThis is Rock-Paper Scissors!\n");
@@ -44,30 +46,28 @@ namespace RpsConsole2
             while (true)
             {
                 //create a Game instance
-                Game game = new Game();
+                // Game game = new Game();
 
-                //int computerChoice = -1;
-                //int player1Choice = -1;
+                gameplay.NewGame();
+
                 int player1wins = 0;//how many rounds p1 has won
                 int computerWins = 0;//how many rounds the compouter has won
                 int numberOfTies = 0;//how many ties there have been
-                //string player1Name = "";
-                //string computerName = "Computer";
                 string player1ChoiceStr;
                 bool successfulConversion = false;
-                //bool isTie = true;
                 string playAgain = "";// this hold the users answer for if they want to play again.
 
                 // get the users name
-                Console.WriteLine("What is your first name?");
-                game.P1.Fname = Console.ReadLine();
-                Console.WriteLine("What is your last name?");
-                game.P1.Lname = Console.ReadLine();
+                Console.WriteLine("What is your first and last name?");
+                gameplay.P1Name(Console.ReadLine().Split(" "));
 
-                Console.WriteLine($"Welcome to R-P-S Game, {game.P1.Fname} {game.P1.Lname}.");
+                // Console.WriteLine("What is your last name?");
+                // game.P1.Lname = Console.ReadLine();
+
+                Console.WriteLine($"Welcome to R-P-S Game, {gameplay.GetP1().Fname} {gameplay.GetP1().Lname}.");
 
                 //a while loop to play rounds till one player has 2 rounds won.
-                while (player1wins < 2 && computerWins < 2)// the Game object will have a method that will calculate if there is a winner.
+                while (gameplay.IsThereAWinner())// the Game object will have a method that will calculate if there is a winner.
                 {
                     //create a Round
                     Round round = new Round();
@@ -96,7 +96,7 @@ namespace RpsConsole2
                             Console.WriteLine($"Please enter a correct number. Either 1, 2, or 3.");
                         }
 
-                    } while (true);
+                    } while (true);// this is an infinite loop.
 
                     // get the computers random choice and add it to the round data
                     round.P2Choice = (GamePiece)(rand.Next(1000) % 3) + 1;// store this on the Round object
@@ -109,7 +109,6 @@ namespace RpsConsole2
                         Console.WriteLine($"This round was a tie!... Let's try again.");
                         // update the tally for this gaming session of how many games the computer and the user have won.
                         numberOfTies++;// ++ increments the int by exactly 1.
-                        //isTie = true;
 
                         //update the roundwinner in the Round
                         round.RoundWinner = 0;
@@ -126,11 +125,8 @@ namespace RpsConsole2
                         Console.WriteLine($"Congrats, {game.P1.Fname}, you won this round.");
                         // update the tally for this gaming session of how many games the computer and the user have won.
 
-                        //maybe have local variables to store this dat temporarily?
+                        //maybe have local variables to store this data temporarily?
                         player1wins = player1wins + 1;// this method gives you the option of incrementing by more than 1
-                                                      // player1wins += 1;
-                                                      // player1wins++;
-                                                      //isTie = false;
 
                         //update the roundwinner in the Round
                         round.RoundWinner = 1;
@@ -154,7 +150,6 @@ namespace RpsConsole2
                         game.Rounds.Add(round);
                         // add the round to the List of rounds
                         rounds.Add(round);
-
                     }
 
                     Console.WriteLine($"\n\tYou chose {round.P1Choice}.\n\tThe {game.P2.Fname} chose {round.P2Choice}.\n");
@@ -165,6 +160,7 @@ namespace RpsConsole2
                 if (player1wins == 2)
                 {
                     //update the w/l records of the players.
+                    games.Add(game);
                     game.P1.Wins += 1;
                     players.Add(game.P1);
                     if (!players.Contains(game.P2))//this may need to be if 'players.Find(p => p.Fname == "Computer") == null'
@@ -176,12 +172,24 @@ namespace RpsConsole2
                     {
                         //EXPLAIN THIS
                         players.Find(p => p.Fname == "Computer").Losses++;
+
+                        // the long way to do this is....
+                        // foreach (Player p in players)
+                        // {
+                        //     if(p.Fname == "Computer"){
+                        //         p.Losses++;
+                        //         break;
+                        //     }
+                        // }
+
+
                     }
                     //assign the game winner to the gamewinner MyProperty
                     game.GameWinner = game.P1;
                 }
                 else
                 {
+                    games.Add(game);
                     //update the w/l records of the players.
                     game.P1.Losses += 1;
                     // add both players to the players List.
@@ -218,6 +226,50 @@ namespace RpsConsole2
                     break;
                 }
             }// exit gameplay
+
+
+            // What code would be necessary to spit out the game stats to the user.
+
+            //what is the users win/loss ratio for all rounds played.
+
+            //stats for the last gamel played
+
+            // go to the final Game played
+            // show the opponent.
+            // show the choices made and result
+            Game finalgame = games[games.Count - 1];
+            Console.WriteLine($"The final game played was between {finalgame.P1.Fname} and {finalgame.P2.Fname}");
+            Console.WriteLine("For each round, the results were.");
+            foreach (Round r in finalgame.Rounds)
+            {
+                int rnum = 1;
+                string roundWinner = "";
+                switch (r.RoundWinner)
+                {
+                    case 0:
+                        roundWinner += "nobody";
+                        break;
+                    case 1:
+                        roundWinner += $"{r.P1.Fname}";
+                        break;
+                    case 2:
+                        roundWinner += $"{r.P2.Fname}";
+                        break;
+                    default:
+                        roundWinner += "nobody";
+                        break;
+                }
+                Console.WriteLine($" In Round {rnum++}, you chose {r.P1Choice}. The {r.P2.Fname} chose {r.P2Choice}. The winner was {roundWinner}");
+            }
+            Console.WriteLine($"In the end, the game winner was {finalgame.GameWinner.Fname}.");
+
+
+
+            //out of all rounds what is the how many of rock to paper to scissors
+
+
+
+
         }//EoM
     }//EoC
 }// EoN
