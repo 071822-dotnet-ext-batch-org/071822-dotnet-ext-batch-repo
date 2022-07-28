@@ -1,0 +1,7 @@
+# Loopdy Loops Challenge
+1. FORLOOP - Create a for-loop in the UseFor(List<int>) method that counts the odd integers from the provided List<int>. Return the total number of odd integers.
+2. FOREACHLOOP - Create a foreach-loop in the UseForEach(List<object>) method that counts the even entries from the provided List<object> and returns the total number found.
+3. DOWHILE - Create a do/while loop in the UseDoWhile(object[], object) method that counts the factors of the provided object number contained in the provided Object Array. Return the total number of factors found. The object Array will have at least 1 element.
+4. WHILELOOP - Create a while loop in the UseWhile(List<int>) method that counts the multiples of 4 from the provided List<int>. Exit the loop when the integer 1234 is found. Return the total number of multiples of 4.
+5. FORLOOP - Create a for-loop in the UseForThreeFour(int[]) method. Return the number of times the int is divisible by 3 and 4.
+6. In the LoopdyLoop(List<string>[]) method, combine all the strings and return the resulting sentence. This means all the strings from the first element List<string> are first. Then move to the second element. All elements strings must have a space between them. You do not have to add a '.' at the end.
