@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RpsConsole2
 {
-    internal class GamePlay
+    public class GamePlay
     {
         /** a class library is a class that has functionality that I hav eunilize in another class or program.
             The benefit of a class library is that I can swap out the file for another
@@ -28,7 +28,7 @@ namespace RpsConsole2
         /// <summary>
         /// This will create a game and add the computer to the P2 spot.
         /// </summary>
-        internal void NewGame()
+        public void NewGame()
         {
             this._CurrentGame = new Game();
         }
@@ -38,12 +38,12 @@ namespace RpsConsole2
         /// 1) Take P1's first and lasts names, 
         /// 2) verify that the player doesn't exist already,
         /// 3) add the player to the game,
-        /// 4) return 1 if the player was already in the players list
-        /// 5) return 0 if not.
+        /// 4) return true if the player was already in the players list
+        /// 5) return false if not.
         /// </summary>
         /// <param name="playerNames"></param>
         /// <returns></returns>
-        internal bool P1Name(string[] playerNames)
+        public bool P1Name(string[] playerNames)
         {
             foreach (Player p in this._players) // [p1, p2, p3, p4, p5]
             {
@@ -57,17 +57,30 @@ namespace RpsConsole2
             }
 
             // we won't add the player to the List<Player> till they have completed a full game.
-            this._CurrentGame.P1.Fname = playerNames[0];
-            this._CurrentGame.P1.Lname = playerNames[1];
+            if (playerNames.Length > 1)
+            {
+                this._CurrentGame.P1.Fname = playerNames[0];
+                this._CurrentGame.P1.Lname = playerNames[1];
+            }
+            else if (playerNames.Length == 1)
+            {
+                this._CurrentGame.P1.Fname = playerNames[0];
+                this._CurrentGame.P1.Lname = "default";
+            }
+            else
+            {
+                this._CurrentGame.P1.Fname = "default";
+                this._CurrentGame.P1.Lname = "name";
+            }
             return false;
         }
 
-        internal Player GetP2()
+        public Player GetP2()
         {
             return this._CurrentGame.P2;
         }
 
-        internal Player GetP1()
+        public Player GetP1()
         {
             return this._CurrentGame.P1;
         }
@@ -149,6 +162,7 @@ namespace RpsConsole2
                 // update the tally for this gaming session of how many games the computer and the user have won.
                 //numberOfTies++;// ++ increments the int by exactly 1.
                 this._CurrentGame.NumberOfTies++;
+
                 //update the roundwinner in the Round
                 round.RoundWinner = 0;
                 // add the round to the List of rounds
@@ -207,6 +221,8 @@ namespace RpsConsole2
             {
                 this._CurrentGame.GameWinner = this._CurrentGame.P1;
                 this._CurrentGame.P1.Wins++;
+                //this._CurrentGame.P1.Wins = this._CurrentGame.P1.Wins +1;
+
                 this._CurrentGame.P2.Losses++;
             }
             else
