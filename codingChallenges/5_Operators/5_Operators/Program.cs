@@ -6,7 +6,7 @@ namespace _5_OperatorsChallenge
     {
         public static void Main(string[] args)
         {
-
+            Console.WriteLine("THis is a test");
         }
 
         /// <summary>
