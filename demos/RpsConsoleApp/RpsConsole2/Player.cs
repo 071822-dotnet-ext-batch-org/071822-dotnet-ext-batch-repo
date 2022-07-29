@@ -7,6 +7,10 @@ namespace RpsConsole2
 {
     public class Player
     {
+
+        public int testint = 0;
+
+
         //A class has Properties, attributes, constructors, and method (mainly)
 
         // an attribute is a single piece of data like an age, DoB, name, etc
