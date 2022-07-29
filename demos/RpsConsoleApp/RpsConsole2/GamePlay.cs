@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RpsConsole2
 {
-    public class GamePlay
+    public class GamePlay : IGamePlay, IGetStuff
     {
         /** a class library is a class that has functionality that I hav eunilize in another class or program.
             The benefit of a class library is that I can swap out the file for another
@@ -90,7 +90,7 @@ namespace RpsConsole2
         /// return false if not.
         /// </summary>
         /// <returns></returns>
-        internal bool IsThereAWinner()
+        public bool IsThereAWinner()
         {
             // return true of one of the players has 2 round wins.
             if (player1wins == 2 || computerWins == 2)
@@ -103,7 +103,7 @@ namespace RpsConsole2
         /// <summary>
         /// This method creates a round, adds the players to it, and adds the round to the current game..
         /// </summary>
-        internal void PlayRound()
+        public void PlayRound()
         {
             Round r = new Round(this._CurrentGame.P1, this._CurrentGame.P2);
             this._CurrentGame.Rounds.Add(r);
@@ -119,7 +119,7 @@ namespace RpsConsole2
         /// <param name="p12choiceStr"></param>
         /// <param name="result"></param>
         /// <returns></returns>
-        internal bool ValidateUserChoice(string p12choiceStr)
+        public bool ValidateUserChoice(string p12choiceStr)
         {
             bool success = Int32.TryParse(p12choiceStr, out int result);// store these choices on the round object
             if (result > 0 && result < 4)
@@ -149,7 +149,7 @@ namespace RpsConsole2
         /// 2 of P2 won the round.
         /// </summary>
         /// <returns></returns>
-        internal int EvaluatePlayersChoices()
+        public int EvaluatePlayersChoices()
         {
             GamePiece p1Choice = this._CurrentGame.Rounds[this._CurrentGame.Rounds.Count - 1].P1Choice;
             GamePiece p2Choice = this._CurrentGame.Rounds[this._CurrentGame.Rounds.Count - 1].P2Choice;
@@ -214,7 +214,7 @@ namespace RpsConsole2
             return this._CurrentGame.NumberOfTies;
         }
 
-        internal Game FinalizeGame()
+        public Game FinalizeGame()
         {
             //assign the gamewinner
             if (player1wins == 2)
@@ -250,11 +250,24 @@ namespace RpsConsole2
         /// <summary>
         /// This method resets the GamePlaye class to start a new game.
         /// </summary>
-        internal void ResetForNewGame()
+        public void ResetForNewGame()
         {
             player1wins = 0;//how many rounds p1 has won
             computerWins = 0;//how many rounds the compouter has won
             _CurrentGame = null;
         }
+
+        void IGamePlay.GetAnError() { }
+
+        public void ShowAccessAmbiguity()
+        {
+            Player p = new Player();
+            p.testint = 1;
+            int testint = 0;
+            testint = 5;
+            p.testint = testint;
+            Console.WriteLine(p.testint);
+        }
+
     }//EoC
 }//EoN

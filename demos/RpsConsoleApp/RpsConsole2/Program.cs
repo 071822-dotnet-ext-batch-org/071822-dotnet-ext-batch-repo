@@ -8,33 +8,8 @@ namespace RpsConsole2
     {
         static void Main(string[] args)
         {
-            //create an instance of a Player
-            /*            
-                        Player p1 = new Player();
-                        p1.Fname = "Mark";
-                        p1.Lname = "Moore";
-                        p1.DoB = new DateTime(1979, 5, 27);
-
-                        Console.WriteLine($"The players name is {p1.Fname} {p1.Lname} and his age is {p1.DoB.ToShortDateString()}.");
-                        p1.SetAge(109);
-                        Console.WriteLine($"The players age is {p1.GetAge()}");
-                        p1.Wins = 10;
-                        int wins = p1.Wins;
-
-                        Console.WriteLine($"{p1.Fname} has {p1.Wins} wins");
-            */
-
-            // Random rand = new Random();// the Random class gets us a pseudorandom decimal between 0 and 1.
-
-            // // These List<>'s are analogous to saving the data permanently in a Db. (We aren't doing that... YET.)
-            // //create a List<Game> to hold all the games
-            // List<Game> games = new List<Game>();
-            // // create a List<Player> to hold allthe players.
-            // List<Player> players = new List<Player>();
-            // // create a List<Round> to hold all the Rounds
-            // List<Round> rounds = new List<Round>();
-
             GamePlay gameplay = new GamePlay();
+            gameplay.ShowAccessAmbiguity();
 
             // maybe I want to add the ability to check out my stats without playing a game?
 
