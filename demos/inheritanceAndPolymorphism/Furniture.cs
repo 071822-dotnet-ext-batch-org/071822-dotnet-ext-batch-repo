@@ -31,7 +31,7 @@ namespace inheritanceAndPolymorphism
             return Convert.ToString(NumEditions);
         }
 
-        public virtual string AString()
+        public virtual string AString(string arg)
         {
             return "this is a string";
         }
