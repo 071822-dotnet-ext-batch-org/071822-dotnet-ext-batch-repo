@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "8_LoopsChallenge", "8_LoopsChallenge.csproj", "{F72E9318-0249-4807-8A1A-83093A92BC62}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "8_LoopsChallenge.Tests", "..\8_LoopsChallenge.Tests\8_LoopsChallenge.Tests.csproj", "{5DD54D7C-626B-4BFD-B046-35CC8F3757AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F72E9318-0249-4807-8A1A-83093A92BC62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F72E9318-0249-4807-8A1A-83093A92BC62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F72E9318-0249-4807-8A1A-83093A92BC62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F72E9318-0249-4807-8A1A-83093A92BC62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DD54D7C-626B-4BFD-B046-35CC8F3757AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DD54D7C-626B-4BFD-B046-35CC8F3757AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DD54D7C-626B-4BFD-B046-35CC8F3757AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DD54D7C-626B-4BFD-B046-35CC8F3757AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D3CDE9C0-CC60-4015-B381-92AA1A6930D7}
+	EndGlobalSection
+EndGlobal
