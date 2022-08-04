@@ -19,7 +19,7 @@ CountryCode SMALLINT NULL check(CountryCode between 0 and 999)-- between is incl
 --create the orders table
 CREATE TABLE Orders(
 OrderId INT PRIMARY KEY IDENTITY(1, 1),
-OrderDate DATETIME DEFAULT(GETDATE()),
+OrderDate DATETIME DEFAULT(()),
 OrderTotal DECIMAL(6,2) NOT NULL,
 FK_Customer INT FOREIGN KEY REFERENCES Customers(CustomerId) NOT NULL,
 FK_Address INT FOREIGN KEY REFERENCES Addresses(AddressId) NOT NULL
@@ -30,6 +30,12 @@ CREATE TABLE CustomerAddressJunction(
 FK_Customer INT FOREIGN KEY REFERENCES Customers(CustomerId) ,
 FK_Address INT FOREIGN KEY REFERENCES Addresses(AddressId)
 );
+
+-- Alter the customers table Notes Column to change the datatype to a more modern type 
+ALTER TABLE Customers ALTER COLUMN Notes NVARCHAR(max);
+
+-- Alter the Orders table OrderTotal Column to change the datatype to a smallmoney 
+ALTER TABLE Orders ALTER COLUMN OrderTotal SMALLMONEY;
 
 -- add a new constraint to a table column.
 ALTER TABLE Addresses 
