@@ -23,6 +23,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RpsConsole2\RpsConsole2.csproj" />
+    <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\RepoLayer\RepoLayer.csproj" />
+    <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
   </ItemGroup>
 
 </Project>

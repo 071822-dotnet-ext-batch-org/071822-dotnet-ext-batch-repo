@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RpsConsole2
+namespace BusinessLayer
 {
-    internal interface IGamePlay
+    public interface IGamePlay
     {
         public void NewGame();
         public bool P1Name(string[] x);

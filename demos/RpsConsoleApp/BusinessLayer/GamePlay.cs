@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Models;
+using RepoLayer;
 
-namespace RpsConsole2
+
+namespace BusinessLayer
 {
+
     public class GamePlay : IGamePlay, IGetStuff
     {
         /** a class library is a class that has functionality that I hav eunilize in another class or program.
@@ -12,10 +12,11 @@ namespace RpsConsole2
             while keep the endpoints the same and completely change the functionality, security, databases used, 
             or methodology of the method used b the main program.
         **/
+        private readonly adonetaccess _repo = new adonetaccess();
 
-        private readonly Random rand = new Random();// the Random class gets us a pseudorandom decimal between 0 and 1.
-        // These List<>'s are analogous to saving the data permanently in a Db. (We aren't doing that... YET.)
-        //create a List<Game> to hold all the games
+        private readonly Random _rand = new Random();// the Random class gets us a pseudorandom decimal between 0 and 1.
+                                                     // These List<>'s are analogous to saving the data permanently in a Db. (We aren't doing that... YET.)
+                                                     //create a List<Game> to hold all the games
         private readonly List<Game> _games = new List<Game>();
         // create a List<Player> to hold allthe players.
         private readonly List<Player> _players = new List<Player>();
@@ -113,7 +114,7 @@ namespace RpsConsole2
         /// This method will:
         /// 1) validate the string can be converted to an int
         /// 2) verify that the int is >0 and less than 4
-        /// 3) if the conversion is successull and in range, get the computer choice and return true,
+        /// 3) if the conversion is successful and in range, get the computer choice and return true,
         /// 4) false if not.
         /// </summary>
         /// <param name="p12choiceStr"></param>
@@ -131,7 +132,7 @@ namespace RpsConsole2
 
                 int indexOfLastRoundAdded = this._CurrentGame.Rounds.Count - 1;// gets the element number of the final round added to the rounds list in the game
                 Round lastRoundAddedToTheListOfRoundsInTheGame = this._CurrentGame.Rounds[indexOfLastRoundAdded];
-                lastRoundAddedToTheListOfRoundsInTheGame.P2Choice = (GamePiece)((rand.Next(1000) % 3) + 1);// this action would be better in another method that would be called from Main()
+                lastRoundAddedToTheListOfRoundsInTheGame.P2Choice = (GamePiece)((_rand.Next(1000) % 3) + 1);// this action would be better in another method that would be called from Main()
 
                 this._CurrentGame.Rounds[this._CurrentGame.Rounds.Count - 1].P1Choice = (GamePiece)result;
                 return true;
@@ -175,7 +176,7 @@ namespace RpsConsole2
                             (p1Choice == GamePiece.SCISSORS && p2Choice == GamePiece.PAPER))
             {
                 player1wins = player1wins + 1;// this method gives you the option of incrementing by more than 1
-                //update the roundwinner in the Round
+                                              //update the roundwinner in the Round
                 round.RoundWinner = 1;
                 // add the round to the List of rounds
                 this._rounds.Add(round);
@@ -185,7 +186,7 @@ namespace RpsConsole2
             {
                 // update the tally for this gaming session of how many games the computer and the user have won.
                 computerWins += 1;// this method gives you the option of incrementing by more than 1.
-                //update the roundwinner in the Round
+                                  //update the roundwinner in the Round
                 round.RoundWinner = 2;
                 // add the round to the List of rounds
                 this._rounds.Add(round);
@@ -269,5 +270,11 @@ namespace RpsConsole2
             Console.WriteLine(p.testint);
         }
 
+        public void testQuery()
+        {
+            // usually there will be something logical to do here.
+            _repo.testQuery();
+            //there may be somethign logical to do here too...
+        }
     }//EoC
 }//EoN

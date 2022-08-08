@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BusinessLayer;
+using Models;
 
 namespace RpsConsole2
 {
@@ -8,7 +10,16 @@ namespace RpsConsole2
     {
         static void Main(string[] args)
         {
+            Console.WriteLine($"Hit enter to get the customer names.");
+            Console.ReadLine();
+
+
+
             GamePlay gameplay = new GamePlay();
+            gameplay.testQuery();
+
+
+
             gameplay.ShowAccessAmbiguity();
 
             // maybe I want to add the ability to check out my stats without playing a game?

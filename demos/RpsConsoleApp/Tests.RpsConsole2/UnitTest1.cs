@@ -1,4 +1,6 @@
 
+using BusinessLayer;
+using Models;
 using RpsConsole2;
 
 namespace Tests.RpsConsole2;
@@ -21,7 +23,7 @@ public class UnitTest1
         string fname = "The";
         string lname = "Computer";
 
-        //assert - compare teh expected result with the actual result of the 'act' action
+        //assert - compare the expected result with the actual result of the 'act' action
         Assert.StrictEqual(fname, p.Fname);
         Assert.StrictEqual(lname, p.Lname);
 
