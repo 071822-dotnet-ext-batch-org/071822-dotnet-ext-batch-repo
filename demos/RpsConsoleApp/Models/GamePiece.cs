@@ -1,4 +1,4 @@
-namespace RpsConsole2
+namespace Models
 {
     public enum GamePiece
     {

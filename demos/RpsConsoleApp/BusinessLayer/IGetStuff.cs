@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Models;
 
-namespace RpsConsole2
+namespace BusinessLayer
 {
     public interface IGetStuff
     {
@@ -12,6 +13,5 @@ namespace RpsConsole2
         public Round GetLastRoundPlayed();
         public int GetPlayer1RoundWins();
         public bool IsThereAWinner();
-
     }
 }
