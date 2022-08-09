@@ -42,7 +42,7 @@ namespace Models
         public string Lname { get; set; }
         public bool Gender { get; set; }//true == female, false == male
 
-        private int wins;
+        private int wins = 0;
         //p1.Wins =3;// the runtime will invoke the set method... but you DON'T have to use the value; 
         //p.wins = wins;
         public int Wins
@@ -58,7 +58,7 @@ namespace Models
             }
         }
 
-        private int losses;
+        private int losses = 0;
         public int Losses
         {
             get

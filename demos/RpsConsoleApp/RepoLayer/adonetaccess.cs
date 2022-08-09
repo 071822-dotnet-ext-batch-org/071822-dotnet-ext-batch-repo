@@ -9,19 +9,15 @@ namespace RepoLayer
         private static readonly SqlConnection conn = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 
         /// <summary>
-        /// This method will check if the player is in the Db and 
-        /// return the player object, if it exists
-        /// if not, returns null.
+        /// This method will query the Db for a entity called "The Computer".
+        /// If it exists, return the computer object,
+        /// If not, return null.
         /// </summary>
-        /// <param name="playerNames"></param>
         /// <returns></returns>
-        public Player? P1Name(string fname, string lname)
+        public Player? GetComputerIfExists()
         {
-            //string query = "SELECT FirstName, LastName, Wins, Losses FROM Players WHERE FirstName = @x AND Lname = @y";
-            using (SqlCommand command = new SqlCommand($"SELECT Top 1 PlayerId, Fname, Lname, Wins, Losses FROM Players WHERE Fname = @x AND Lname = @y", conn))
+            using (SqlCommand command = new SqlCommand($"SELECT Top 1 PlayerId, Fname, Lname, Wins, Losses FROM Players WHERE Fname = 'The' AND Lname = 'Computer'", conn))
             {
-                command.Parameters.AddWithValue("@x", fname);
-                command.Parameters.AddWithValue("@y", lname);
                 conn.Open();
                 SqlDataReader? ret = command.ExecuteReader();
 
@@ -35,6 +31,51 @@ namespace RepoLayer
                         Wins = ret.GetInt32(3),
                         Losses = ret.GetInt32(4)
                     };
+                    conn.Close();
+                    return p;
+                }
+                else
+                {
+                    conn.Close();
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// This method will check if the player is in the Db and 
+        /// return the player object, if it exists
+        /// if not, returns null.
+        /// </summary>
+        /// <param name="playerNames"></param>
+        /// <returns></returns>
+        public Player? P1Name(string fname, string lname)
+        {
+            //string query = "SELECT FirstName, LastName, Wins, Losses FROM Players WHERE FirstName = @x AND Lname = @y";
+            using (SqlCommand command = new SqlCommand($"SELECT Top 1 PlayerId, Fname, Lname, Wins, Losses FROM Players WHERE Fname = @fname AND Lname = @lname", conn))
+            {
+                command.Parameters.AddWithValue("@fname", fname);// add dynamic data like this to protect against SQL Injection.
+                command.Parameters.AddWithValue("@lname", lname);
+                conn.Open();
+                SqlDataReader? ret = command.ExecuteReader();
+
+                if (ret.Read())
+                {
+                    // Player p = new Player()
+                    // {
+                    //     PlayerId = ret.GetGuid(0),
+                    //     Fname = ret.GetString(1),
+                    //     Lname = ret.GetString(2),
+                    //     Wins = ret.GetInt32(3),
+                    //     Losses = ret.GetInt32(4)
+                    // };
+                    Player p = new Player();
+                    p.PlayerId = ret.GetGuid(0);
+                    p.Fname = ret.GetString(1);
+                    p.Lname = ret.GetString(2);
+                    p.Wins = ret.GetInt32(3);
+                    p.Losses = ret.GetInt32(4);
+
                     conn.Close();
                     return p;
                 }
