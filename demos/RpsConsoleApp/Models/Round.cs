@@ -8,6 +8,7 @@ namespace Models
     public class Round
     {
         //a constructor that takes 2 players.
+        public Guid RoundId { get; set; } = new Guid();
         public Round(Player p1, Player p2)
         {
             this.P1 = p1;

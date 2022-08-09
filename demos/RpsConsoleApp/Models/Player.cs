@@ -7,6 +7,7 @@ namespace Models
 {
     public class Player
     {
+        public Guid PlayerId { get; set; } = new Guid();
 
         public int testint = 0;
 

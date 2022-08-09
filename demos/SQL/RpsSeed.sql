@@ -2,10 +2,20 @@
 
 --GamePieces
 CREATE TABLE GamePieces(
-GamePieceId INT PRIMARY KEY IDENTITY(0,1),
+GamePieceId INT PRIMARY KEY IDENTITY(1,1),
 GamePieceNumber INT NOT NULL DEFAULT -1,
 Name nvarchar(20) NOT NULL
 );
+
+INSERT INTO GamePieces (GamePieceNumber, Name) VALUES (1, 'ROCK'),(2, 'PAPER'),(3, 'SCISSORS');
+-- we use a PK apart fromt he avlue of the choice so that we can extend the app later without 
+-- changing the choices others made years ago.
+-- 1 = 2 ROCK
+-- 2 = 4 PAPER
+-- 3 = 5 SCISSORS
+-- 4 = 6 LIZARD
+-- 5 = 3 pebble
+-- 6 = 1 Sandstone
 
 --player
 CREATE TABLE Players(
@@ -29,6 +39,9 @@ GameWinner_PlayerId UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES Players(Pla
 --round
 CREATE TABLE Rounds(
 RoundId UNIQUEIDENTIFIER PRIMARY KEY,
+-- The FK reference to the PK of GamePiece is better because I may 
+-- change the integer value of the 
+-- gamepiece later. THe Fk value won't have to be changed.
 P1Choice INT NOT NULL FOREIGN KEY REFERENCES GamePieces(GamePieceId),
 P2Choice INT NOT NULL FOREIGN KEY REFERENCES GamePieces(GamePieceId),
 GameId UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES Games(GameId),
