@@ -46,34 +46,55 @@ namespace BusinessLayer
         /// <returns></returns>
         public bool P1Name(string[] playerNames)
         {
-            foreach (Player p in this._players) // [p1, p2, p3, p4, p5]
-            {
-                //see if the player is already in the List<Player>
-                if (p.Fname.Equals(playerNames[0]) && p.Lname.Equals(playerNames[1]))
-                {
-                    //add this existing player to the current game.
-                    this._CurrentGame.P1 = p;
-                    return true;//tell the main method that the player was already in the system
-                }
-            }
+            // if (playerNames.Length > 1)
+            // {
+
+            //     foreach (Player p1 in this._players) // [p1, p2, p3, p4, p5]
+            //     {
+            //         //see if the player is already in the List<Player>
+            //         if (p1.Fname.Equals(playerNames[0]) && p1.Lname.Equals(playerNames[1]))
+            //         {
+            //             //add this existing player to the current game.
+            //             this._CurrentGame.P1 = p1;
+            //             return true;//tell the main method that the player was already in the system
+            //         }
+            //     }
+            // }
+
+            //instead of the above, we will search the Db for this player.
+
 
             // we won't add the player to the List<Player> till they have completed a full game.
+            string fname;
+            string lname;
+            //vette the array right now to the repo layer doesn't have to.
             if (playerNames.Length > 1)
             {
-                this._CurrentGame.P1.Fname = playerNames[0];
-                this._CurrentGame.P1.Lname = playerNames[1];
+                fname = playerNames[0];
+                lname = playerNames[1];
             }
             else if (playerNames.Length == 1)
             {
-                this._CurrentGame.P1.Fname = playerNames[0];
-                this._CurrentGame.P1.Lname = "default";
+                fname = playerNames[0];
+                lname = "default";
             }
             else
             {
-                this._CurrentGame.P1.Fname = "default";
-                this._CurrentGame.P1.Lname = "name";
+                fname = "default";
+                lname = "name";
             }
-            return false;
+            // send the repo the real names or the defaulted names.
+            Player? p = _repo.P1Name(fname, lname);
+            if (p == null)
+            {
+                this._CurrentGame.P1 = new Player(fname, lname);
+                return false;
+            }
+            else
+            {
+                this._CurrentGame.P1 = p;
+                return true;
+            }
         }
 
         public Player GetP2()
@@ -270,11 +291,11 @@ namespace BusinessLayer
             Console.WriteLine(p.testint);
         }
 
-        public void testQuery()
-        {
-            // usually there will be something logical to do here.
-            _repo.testQuery();
-            //there may be somethign logical to do here too...
-        }
+        // public void testQuery()
+        // {
+        //     // usually there will be something logical to do here.
+        //     _repo.testQuery();
+        //     //there may be somethign logical to do here too...
+        // }
     }//EoC
 }//EoN

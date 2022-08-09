@@ -10,19 +10,16 @@ namespace RpsConsole2
     {
         static void Main(string[] args)
         {
-            Console.WriteLine($"Hit enter to get the customer names.");
-            Console.ReadLine();
 
-
-
+            #region 
+            //Console.WriteLine($"Hit enter to get the customer names.");
+            //Console.ReadLine();
             GamePlay gameplay = new GamePlay();
-            gameplay.testQuery();
+            //gameplay.testQuery();
+            #endregion
+            //gameplay.ShowAccessAmbiguity();
 
-
-
-            gameplay.ShowAccessAmbiguity();
-
-            // maybe I want to add the ability to check out my stats without playing a game?
+            // WHY KEEP A DB? - because maybe I want to add the ability to check out my stats without playing a game?
 
             // Welcome message...
             Console.WriteLine("\t\tWelcome to you favorite game!\n\t\tThis is Rock-Paper Scissors!\n");
