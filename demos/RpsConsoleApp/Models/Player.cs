@@ -8,7 +8,7 @@ namespace Models
     public class Player
     {
         public Guid PlayerId { get; set; } = new Guid();
-        public int testint = 0;
+        //public int testint = 0;
         //A class has Properties, attributes, constructors, and method (mainly)
         // an attribute is a single piece of data like an age, DoB, name, etc
         // an access modifier controls what parts of code can access a specific class or field (or property, or method)
