@@ -8,12 +8,8 @@ namespace Models
     public class Player
     {
         public Guid PlayerId { get; set; } = new Guid();
-
         public int testint = 0;
-
-
         //A class has Properties, attributes, constructors, and method (mainly)
-
         // an attribute is a single piece of data like an age, DoB, name, etc
         // an access modifier controls what parts of code can access a specific class or field (or property, or method)
         private int myAge = 0;
@@ -23,7 +19,6 @@ namespace Models
         {
             return myAge;
         }
-
         public void SetAge(int myAge)
         {
             if (myAge > 110 || myAge < 18)
@@ -35,14 +30,12 @@ namespace Models
                 this.myAge = myAge;
             }
         }
-
         // A Property is a special C# abstaction that is a combination of a Getter and a Setter and the data that they get and set.
         public DateTime DoB { get; set; } = new DateTime(1920, 1, 1);
         public string Fname { get; set; }
         public string Lname { get; set; }
         public bool Gender { get; set; }//true == female, false == male
-
-        private int wins;
+        private int wins = 0;
         //p1.Wins =3;// the runtime will invoke the set method... but you DON'T have to use the value; 
         //p.wins = wins;
         public int Wins
@@ -57,8 +50,7 @@ namespace Models
                 // is ignored and the current value is incremented by 1.
             }
         }
-
-        private int losses;
+        private int losses = 0;
         public int Losses
         {
             get
@@ -75,7 +67,6 @@ namespace Models
         // You are given a default constructor when you don't create one. BUT if ou create a parameterized constructor, 
         // you MUST create your own defualt constructor
         public Player() { }
-
         //parameterized constructor
         public Player(string fname, string lname)
         {

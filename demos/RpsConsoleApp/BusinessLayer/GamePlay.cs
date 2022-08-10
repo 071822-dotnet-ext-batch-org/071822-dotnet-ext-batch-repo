@@ -6,7 +6,8 @@ namespace BusinessLayer
 
     public class GamePlay : IGamePlay, IGetStuff
     {
-        /** a class library is a class that has functionality that I hav eunilize in another class or program.
+        /** 
+            a class library is a class that has functionality that I hav eunilize in another class or program.
             The benefit of a class library is that I can swap out the file for another
             while keep the endpoints the same and completely change the functionality, security, databases used, 
             or methodology of the method used b the main program.
@@ -14,11 +15,11 @@ namespace BusinessLayer
         private readonly adonetaccess _repo = new adonetaccess();
 
         private readonly Random _rand = new Random();// the Random class gets us a pseudorandom decimal between 0 and 1.
-                                                     // These List<>'s are analogous to saving the data permanently in a Db. (We aren't doing that... YET.)
-                                                     //create a List<Game> to hold all the games
+        // These List<>'s are analogous to saving the data permanently in a Db. (We aren't doing that... YET.)
+        //create a List<Game> to hold all the games
         private readonly List<Game> _games = new List<Game>();
         // create a List<Player> to hold allthe players.
-        private readonly List<Player> _players = new List<Player>();
+        readonly List<Player> _players = new List<Player>();
         // create a List<Round> to hold all the Rounds
         private readonly List<Round> _rounds = new List<Round>();
         private int player1wins = 0;//how many rounds p1 has won
@@ -31,7 +32,27 @@ namespace BusinessLayer
         public void NewGame()
         {
             this._CurrentGame = new Game();
+            this.GetComputerIfexists();
         }
+
+        /// <summary>
+        /// query the Db for the Computer (if it exists) and place that PlayerId in the P2 position.
+        /// The repo layer will return null if hte computer isn't in the Db.
+        /// Otherwise, return the computer object/
+        /// </summary>
+        private void GetComputerIfexists()
+        {
+            Player? p = this._repo.GetComputerIfExists();//if this returns null, I'll create a guid and assign it to P2.PlayerId
+            if (p == null)
+            {
+                this._CurrentGame.P2.PlayerId = new Guid();
+            }
+            else
+            {
+                this._CurrentGame.P2 = p;
+            }
+        }
+
 
         /// <summary>
         /// This method will:
@@ -61,9 +82,6 @@ namespace BusinessLayer
             // }
 
             //instead of the above, we will search the Db for this player.
-
-
-            // we won't add the player to the List<Player> till they have completed a full game.
             string fname;
             string lname;
             //vette the array right now to the repo layer doesn't have to.
@@ -87,12 +105,12 @@ namespace BusinessLayer
             if (p == null)
             {
                 this._CurrentGame.P1 = new Player(fname, lname);
-                return false;
+                return false;// because the player did not exist
             }
             else
             {
                 this._CurrentGame.P1 = p;
-                return true;
+                return true;// because the player already existed in the Db.
             }
         }
 
@@ -172,9 +190,9 @@ namespace BusinessLayer
         /// <returns></returns>
         public int EvaluatePlayersChoices()
         {
+            //I assign the value of the players choices in this variable PURELY for convenience
             GamePiece p1Choice = this._CurrentGame.Rounds[this._CurrentGame.Rounds.Count - 1].P1Choice;
             GamePiece p2Choice = this._CurrentGame.Rounds[this._CurrentGame.Rounds.Count - 1].P2Choice;
-            //int numberOfTies = this._CurrentGame.NumberOfTies;
             Round round = this._CurrentGame.Rounds[this._CurrentGame.Rounds.Count - 1];
 
             // evaluate the choices to determine the winner of the round.            
@@ -187,7 +205,7 @@ namespace BusinessLayer
                 //update the roundwinner in the Round
                 round.RoundWinner = 0;
                 // add the round to the List of rounds
-                this._rounds.Add(round);
+                //this._rounds.Add(round);// we don't need this because at the end of the game, the List<Round> will be parsed to insert the rounds into the Db.
                 return 0;
             }
             // if the user won
@@ -199,7 +217,7 @@ namespace BusinessLayer
                                               //update the roundwinner in the Round
                 round.RoundWinner = 1;
                 // add the round to the List of rounds
-                this._rounds.Add(round);
+                //this._rounds.Add(round);
                 return 1;
             }
             else//if the computer won
@@ -209,7 +227,7 @@ namespace BusinessLayer
                                   //update the roundwinner in the Round
                 round.RoundWinner = 2;
                 // add the round to the List of rounds
-                this._rounds.Add(round);
+                //this._rounds.Add(round);
                 return 2;
             }
         }
@@ -242,9 +260,7 @@ namespace BusinessLayer
             {
                 this._CurrentGame.GameWinner = this._CurrentGame.P1;
                 this._CurrentGame.P1.Wins++;
-                //this._CurrentGame.P1.Wins = this._CurrentGame.P1.Wins +1;
-
-                this._CurrentGame.P2.Losses++;
+                this._CurrentGame.P2.Losses++;// at the end of the game, the repo layer will just increment the W/L of the computer in the Db.
             }
             else
             {
@@ -260,7 +276,7 @@ namespace BusinessLayer
             else
             {
                 //shouldn't have to make any changes to the player in the list because the P1 in currentGame is a reference to it
-                // this means that P1 points to the same player as the List player. 
+                // this means that P1 points to the same player as the List player (on the Heap). 
             }
 
             // add the game to the game list
