@@ -268,19 +268,52 @@ namespace BusinessLayer
                 this._CurrentGame.P2.Wins++;
                 this._CurrentGame.P1.Losses++;
             }
+
             //add/update the p1 to the List<Player>
-            if (!_players.Exists(p => p.Fname == this._CurrentGame.P1.Fname && p.Lname == this._CurrentGame.P1.Lname))
+            // if (!_players.Exists(p => p.Fname == this._CurrentGame.P1.Fname && p.Lname == this._CurrentGame.P1.Lname))
+            // {
+            //     this._players.Add(this._CurrentGame.P1);
+            //     /**
+            //     in SQL you can add a new row with the INSERT keyword
+            //     THe keyword 'ALTER' will find a row and change the specified data
+            //     There is also the keywords 'IF EXISTS'
+            //     Find out whe happens if the combination 'ALTER IF EXISTS' defaults to INSERT if that row does not exists in the table. 
+            //     **/
+            // }
+            // else
+            // {
+            //     //shouldn't have to make any changes to the player in the list because the P1 in currentGame is a reference to it
+            //     // this means that P1 points to the same player as the List player (on the Heap). 
+            // }
+
+            // // add the game to the game list
+            // this._games.Add(this._CurrentGame);
+
+            //STEP 1.
+            // if the player if there, we update it's Data
+            // if not, we insert the player.
+            if (this._repo.ExistsPlayerById(this._CurrentGame.P1.PlayerId))// check if the PlayerId is in the Db already.
             {
-                this._players.Add(this._CurrentGame.P1);
+                // proceed with UPDATEing the player
+                this._repo.UpdatePlayerById(this._CurrentGame.P1);
             }
             else
             {
-                //shouldn't have to make any changes to the player in the list because the P1 in currentGame is a reference to it
-                // this means that P1 points to the same player as the List player (on the Heap). 
+                // proceed with INSERTing the player the player
+                this._repo.InsertNewPlayer(this._CurrentGame.P1);
             }
 
-            // add the game to the game list
-            this._games.Add(this._CurrentGame);
+            //STEP 2.
+            //add the rounds
+
+
+            //STEP 3. add the game itself
+
+
+            //STEP 4. add the game and round ids to the games_rounds_Junction table
+
+
+
             return this._CurrentGame;
         }
 

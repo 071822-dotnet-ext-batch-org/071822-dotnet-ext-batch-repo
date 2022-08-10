@@ -8,6 +8,9 @@ namespace RepoLayer
     {
         private static readonly SqlConnection conn = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 
+
+
+
         /// <summary>
         /// This method will query the Db for a entity called "The Computer".
         /// If it exists, return the computer object,
@@ -41,6 +44,55 @@ namespace RepoLayer
                 }
             }
         }
+
+        /// <summary>
+        /// This method will check if the player exists and return true if the playerId is in the Db.
+        /// If not, returns false.
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <returns></returns>
+        public bool ExistsPlayerById(Guid playerId)
+        {
+            using (SqlCommand command = new SqlCommand($"SELECT Top 1 PlayerId FROM Players WHERE PlayerId = @x", conn))
+            {
+                command.Parameters.AddWithValue("@x", playerId);// add dynamic data like this to protect against SQL Injection.
+                conn.Open();
+                SqlDataReader? ret = command.ExecuteReader();
+                return ret.Read() ? true : false;// this ternary operator is the same as the below if/else statement.
+                // if (ret.Read())
+                // {
+                //     return true;
+                // }
+                // else
+                // {
+                //     return false;
+                // }
+            }
+        }
+
+        public bool InsertNewPlayer(Player p)
+        {
+            using (SqlCommand command = new SqlCommand($"INSERT INTO Players VALUES (@playerId, @fname, @lname, @wins, @losses)", conn))
+            {
+                command.Parameters.AddWithValue("@fname", p.Fname);// add dynamic data like this to protect against SQL Injection.
+                command.Parameters.AddWithValue("@lname", p.Lname);
+                command.Parameters.AddWithValue("@wins", p.Wins);
+                command.Parameters.AddWithValue("@losses", p.Losses);
+                command.Parameters.AddWithValue("@playerId", p.PlayerId);
+                conn.Open();
+                int ret = command.ExecuteNonQuery();
+
+                if (ret == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
 
         /// <summary>
         /// This method will check if the player is in the Db and 
@@ -84,6 +136,28 @@ namespace RepoLayer
                     conn.Close();
                     return null;
                 }
+            }
+        }
+
+        /// <summary>
+        /// This method updates the table row that already exists with the specified PlayerId
+        /// If sussessful, return 1
+        /// if unseccessful returns 0;
+        /// </summary>
+        /// <param name="p"></param>
+        public int UpdatePlayerById(Player p)
+        {
+            using (SqlCommand command = new SqlCommand($"UPDATE TABLE Players SET Fname = @a, Lname = @b, Wins = @c, Losses = @d WHERE PlayerId = @x", conn))
+            {
+                command.Parameters.AddWithValue("@a", p.Fname);// add dynamic data like this to protect against SQL Injection.
+                command.Parameters.AddWithValue("@b", p.Lname);
+                command.Parameters.AddWithValue("@c", p.Wins);
+                command.Parameters.AddWithValue("@d", p.Losses);
+                command.Parameters.AddWithValue("@x", p.PlayerId);
+
+                conn.Open();
+                int ret = command.ExecuteNonQuery();// if not successful, we will get a 0 back. Otherwise, 1.
+                return ret;
             }
         }
 
