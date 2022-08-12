@@ -32,7 +32,7 @@ namespace BusinessLayer
         public void NewGame()
         {
             this._CurrentGame = new Game();
-            this.GetComputerIfexists();
+            this.GetComputerIfExists();
         }
 
         /// <summary>
@@ -40,12 +40,12 @@ namespace BusinessLayer
         /// The repo layer will return null if hte computer isn't in the Db.
         /// Otherwise, return the computer object/
         /// </summary>
-        private void GetComputerIfexists()
+        private void GetComputerIfExists()
         {
             Player? p = this._repo.GetComputerIfExists();//if this returns null, I'll create a guid and assign it to P2.PlayerId
             if (p == null)
             {
-                this._CurrentGame.P2.PlayerId = new Guid();
+                //this._CurrentGame.P2.PlayerId = Guid.NewGuid();
             }
             else
             {
@@ -66,6 +66,7 @@ namespace BusinessLayer
         /// <returns></returns>
         public bool P1Name(string[] playerNames)
         {
+            #region no db code
             // if (playerNames.Length > 1)
             // {
 
@@ -80,11 +81,10 @@ namespace BusinessLayer
             //         }
             //     }
             // }
-
+            #endregion
             //instead of the above, we will search the Db for this player.
-            string fname;
-            string lname;
-            //vette the array right now to the repo layer doesn't have to.
+            string fname, lname;
+            // vette the array right now to the repo layer doesn't have to.
             if (playerNames.Length > 1)
             {
                 fname = playerNames[0];
@@ -110,6 +110,7 @@ namespace BusinessLayer
             else
             {
                 this._CurrentGame.P1 = p;
+                //Console.WriteLine($"{p.Fname} {p.Lname} {p.Wins} {p.Losses}");
                 return true;// because the player already existed in the Db.
             }
         }
@@ -145,6 +146,7 @@ namespace BusinessLayer
         public void PlayRound()
         {
             Round r = new Round(this._CurrentGame.P1, this._CurrentGame.P2);
+            r.GameId = this._CurrentGame.GameId;
             this._CurrentGame.Rounds.Add(r);
         }
 
@@ -203,7 +205,7 @@ namespace BusinessLayer
                 this._CurrentGame.NumberOfTies++;
 
                 //update the roundwinner in the Round
-                round.RoundWinner = 0;
+                round.RoundWinner = new Guid();// when you use 'new Guid:', an empty guid is generated. "00000000-0000-0000-0000-00000000000";
                 // add the round to the List of rounds
                 //this._rounds.Add(round);// we don't need this because at the end of the game, the List<Round> will be parsed to insert the rounds into the Db.
                 return 0;
@@ -214,8 +216,8 @@ namespace BusinessLayer
                             (p1Choice == GamePiece.SCISSORS && p2Choice == GamePiece.PAPER))
             {
                 player1wins = player1wins + 1;// this method gives you the option of incrementing by more than 1
-                                              //update the roundwinner in the Round
-                round.RoundWinner = 1;
+                //update the roundwinner in the Round
+                round.RoundWinner = this._CurrentGame.P1.PlayerId;
                 // add the round to the List of rounds
                 //this._rounds.Add(round);
                 return 1;
@@ -224,8 +226,8 @@ namespace BusinessLayer
             {
                 // update the tally for this gaming session of how many games the computer and the user have won.
                 computerWins += 1;// this method gives you the option of incrementing by more than 1.
-                                  //update the roundwinner in the Round
-                round.RoundWinner = 2;
+                //update the roundwinner in the Round
+                round.RoundWinner = this._CurrentGame.P2.PlayerId;
                 // add the round to the List of rounds
                 //this._rounds.Add(round);
                 return 2;
@@ -256,19 +258,41 @@ namespace BusinessLayer
         public Game FinalizeGame()
         {
             //assign the gamewinner
-            if (player1wins == 2)
+            if (this.FinalizeStats())
             {
-                this._CurrentGame.GameWinner = this._CurrentGame.P1;
-                this._CurrentGame.P1.Wins++;
-                this._CurrentGame.P2.Losses++;// at the end of the game, the repo layer will just increment the W/L of the computer in the Db.
-            }
-            else
-            {
-                this._CurrentGame.GameWinner = this._CurrentGame.P2;
-                this._CurrentGame.P2.Wins++;
-                this._CurrentGame.P1.Losses++;
-            }
+                //STEP 1. Save the current p1 to the Db
+                if (!this.PersistPlayer(this._CurrentGame.P1))
+                {
+                    throw new SystemException("There was a problem finalizing the game and all was lost.");
+                };
 
+                //STEP 2. Save the current p2 to the Db
+                if (!this.PersistPlayer(this._CurrentGame.P2))
+                {
+                    throw new SystemException("There was a problem finalizing the game and all was lost.");
+                };
+
+                //STEP 3. add the game itself
+                if (this.PersistGame() != 1)
+                {
+                    throw new SystemException("There was a problem finalizing the game and all was lost.");
+                }
+
+                //STEP 4.
+                //add the rounds by calling the add Round method in a loop.
+                if (this.PersistRounds(this._CurrentGame.Rounds) != 1)
+                {
+                    throw new SystemException("There was a problem finalizing the game and all was lost.");
+                }
+
+                //STEP 5. add the game and Player ids to the games_players_Junction table
+
+                //TODO
+
+            }
+            else throw new SystemException("There was a problem finalizing the game and all was lost.");
+            return this._CurrentGame;
+            #region no db code
             //add/update the p1 to the List<Player>
             // if (!_players.Exists(p => p.Fname == this._CurrentGame.P1.Fname && p.Lname == this._CurrentGame.P1.Lname))
             // {
@@ -288,33 +312,84 @@ namespace BusinessLayer
 
             // // add the game to the game list
             // this._games.Add(this._CurrentGame);
+            #endregion
+        }
 
-            //STEP 1.
-            // if the player if there, we update it's Data
+        private int PersistGame()
+        {
+            if (this._repo.PersistGame(this._CurrentGame) != 1)
+            {
+                return 0;
+            }
+            else return 1;
+        }
+
+        /// <summary>
+        /// This method will save all the Game rounds to the Db.
+        /// </summary>
+        /// <param name="rounds"></param>
+        /// <returns></returns>
+        private int PersistRounds(List<Round> rounds)
+        {
+            int ret = 0;
+            foreach (Round r in rounds)
+            {
+                ret = this._repo.PersistRounds(r);
+                if (ret != 1)
+                {
+                    return 0;
+                }
+            }
+            return ret;
+        }
+
+        private bool FinalizeStats()
+        {
+            try
+            {
+                if (player1wins == 2)
+                {
+                    this._CurrentGame.GameWinner = this._CurrentGame.P1;
+                    this._CurrentGame.P1.Wins++;
+                    this._CurrentGame.P2.Losses++;// at the end of the game, the repo layer will just increment the W/L of the computer in the Db.
+                }
+                else
+                {
+                    this._CurrentGame.GameWinner = this._CurrentGame.P2;
+                    this._CurrentGame.P2.Wins++;
+                    this._CurrentGame.P1.Losses++;// breakpoint here to check that the computer is being updated correctly.
+                }
+                return true;
+            }
+            catch (SystemException ex)
+            {
+                //probably ought to log this somewhere.
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// This method saves both players to the Db or updates them if they already exist.
+        /// Theis mehtod returns true if both saves were successful.
+        /// /// </summary>
+        /// <returns></returns>
+        private bool PersistPlayer(Player p)
+        {
+            // if the player is there, we update its Data
             // if not, we insert the player.
-            if (this._repo.ExistsPlayerById(this._CurrentGame.P1.PlayerId))// check if the PlayerId is in the Db already.
+            if (this._repo.ExistsPlayerById(p.PlayerId))
             {
-                // proceed with UPDATEing the player
-                this._repo.UpdatePlayerById(this._CurrentGame.P1);
+                if (this._repo.UpdatePlayerById(p) != 1)
+                {
+                    return false;
+                }
             }
-            else
+            // this was a whole 7 line else/if statement combined into one line! :)
+            else if (this._repo.InsertNewPlayer(p) != 1)
             {
-                // proceed with INSERTing the player the player
-                this._repo.InsertNewPlayer(this._CurrentGame.P1);
+                return false;
             }
-
-            //STEP 2.
-            //add the rounds
-
-
-            //STEP 3. add the game itself
-
-
-            //STEP 4. add the game and round ids to the games_rounds_Junction table
-
-
-
-            return this._CurrentGame;
+            return true;
         }
 
         /// <summary>
@@ -329,15 +404,15 @@ namespace BusinessLayer
 
         void IGamePlay.GetAnError() { }
 
-        public void ShowAccessAmbiguity()
-        {
-            Player p = new Player();
-            p.testint = 1;
-            int testint = 0;
-            testint = 5;
-            p.testint = testint;
-            Console.WriteLine(p.testint);
-        }
+        // public void ShowAccessAmbiguity()
+        // {
+        //     Player p = new Player();
+        //     p.testint = 1;
+        //     int testint = 0;
+        //     testint = 5;
+        //     p.testint = testint;
+        //     Console.WriteLine(p.testint);
+        // }
 
         // public void testQuery()
         // {
