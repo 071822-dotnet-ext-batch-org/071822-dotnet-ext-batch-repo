@@ -51,8 +51,18 @@ RoundWinner_PlayerId UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES Players(Pl
 
 
 -- Player_GameJunction
+-- TODO fix this
 CREATE TABLE Player_Game_Junction(
 P1_PlayerId UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES Players(PlayerId),
 P2_PlayerId UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES Players(PlayerId),
-GameId UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES Players(PlayerId)
+GameId UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES Games(GameId)-- the table has a PlayerId KF set...... oops
+);
+
+DROP TABLE Player_Game_Junction;
+
+-- we didn't end up using this....
+-- Player_GameJunction
+CREATE TABLE Round_Game_Junction(
+RoundId UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES Players(PlayerId),
+GameId UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES Games(GameId)
 );

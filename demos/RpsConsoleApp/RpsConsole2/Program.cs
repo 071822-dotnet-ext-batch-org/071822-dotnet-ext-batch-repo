@@ -10,17 +10,8 @@ namespace RpsConsole2
     {
         static void Main(string[] args)
         {
-
-            #region 
-            //Console.WriteLine($"Hit enter to get the customer names.");
-            //Console.ReadLine();
             GamePlay gameplay = new GamePlay();
-            //gameplay.testQuery();
-            #endregion
-            //gameplay.ShowAccessAmbiguity();
-
             // WHY KEEP A DB? - because maybe I want to add the ability to check out my stats without playing a game?
-
             // Welcome message...
             Console.WriteLine("\t\tWelcome to you favorite game!\n\t\tThis is Rock-Paper Scissors!\n");
 
@@ -55,12 +46,10 @@ namespace RpsConsole2
                     do
                     {
                         Console.WriteLine("Please enter...\n\t1 for Rock.\n\t2 for Paper.\n\t3 for Scissors.");
-
                         // validate the users choice and assign the 
                         bool successfulConversion = gameplay.ValidateUserChoice(Console.ReadLine());
                         if (successfulConversion) break;
                         else Console.WriteLine($"Please enter a correct number. Either 1, 2, or 3.");
-
                     } while (true);// this is an infinite loop.
 
 

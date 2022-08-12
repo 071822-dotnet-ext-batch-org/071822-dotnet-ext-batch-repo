@@ -58,19 +58,28 @@ namespace RepoLayer
                 command.Parameters.AddWithValue("@x", playerId);// add dynamic data like this to protect against SQL Injection.
                 conn.Open();
                 SqlDataReader? ret = command.ExecuteReader();
-                return ret.Read() ? true : false;// this ternary operator is the same as the below if/else statement.
-                // if (ret.Read())
-                // {
-                //     return true;
-                // }
-                // else
-                // {
-                //     return false;
-                // }
+                //return ret.Read() ? true : false;// this ternary operator is the same as the below if/else statement.
+                if (ret.Read())
+                {
+                    conn.Close();
+                    return true;
+                }
+                else
+                {
+                    conn.Close();
+                    return false;
+                }
             }
         }
 
-        public bool InsertNewPlayer(Player p)
+
+        /// <summary>
+        /// This method inserts a player to the Db.
+        /// Returns 1 if successful. Returns 0 if unsuccessful.
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public int InsertNewPlayer(Player p)
         {
             using (SqlCommand command = new SqlCommand($"INSERT INTO Players VALUES (@playerId, @fname, @lname, @wins, @losses)", conn))
             {
@@ -84,11 +93,13 @@ namespace RepoLayer
 
                 if (ret == 1)
                 {
-                    return true;
+                    conn.Close();
+                    return ret;
                 }
                 else
                 {
-                    return false;
+                    conn.Close();
+                    return ret;
                 }
             }
         }
@@ -113,21 +124,14 @@ namespace RepoLayer
 
                 if (ret.Read())
                 {
-                    // Player p = new Player()
-                    // {
-                    //     PlayerId = ret.GetGuid(0),
-                    //     Fname = ret.GetString(1),
-                    //     Lname = ret.GetString(2),
-                    //     Wins = ret.GetInt32(3),
-                    //     Losses = ret.GetInt32(4)
-                    // };
                     Player p = new Player();
                     p.PlayerId = ret.GetGuid(0);
                     p.Fname = ret.GetString(1);
                     p.Lname = ret.GetString(2);
                     p.Wins = ret.GetInt32(3);
                     p.Losses = ret.GetInt32(4);
-
+                    //Console.WriteLine($"p - {p.PlayerId} {p.Fname} {p.Lname} {p.Wins} {p.Losses}");
+                    //Console.WriteLine($"ret - {ret.GetGuid(0)} {ret.GetString(1)} {ret.GetString(2)} {ret.GetInt32(3)} {ret.GetInt32(4)}");
                     conn.Close();
                     return p;
                 }
@@ -141,13 +145,13 @@ namespace RepoLayer
 
         /// <summary>
         /// This method updates the table row that already exists with the specified PlayerId
-        /// If sussessful, return 1
-        /// if unseccessful returns 0;
+        /// If sussessful, return true
+        /// if unseccessful returns false;
         /// </summary>
         /// <param name="p"></param>
         public int UpdatePlayerById(Player p)
         {
-            using (SqlCommand command = new SqlCommand($"UPDATE TABLE Players SET Fname = @a, Lname = @b, Wins = @c, Losses = @d WHERE PlayerId = @x", conn))
+            using (SqlCommand command = new SqlCommand($"UPDATE Players SET Fname = @a, Lname = @b, Wins = @c, Losses = @d WHERE PlayerId = @x", conn))
             {
                 command.Parameters.AddWithValue("@a", p.Fname);// add dynamic data like this to protect against SQL Injection.
                 command.Parameters.AddWithValue("@b", p.Lname);
@@ -157,42 +161,78 @@ namespace RepoLayer
 
                 conn.Open();
                 int ret = command.ExecuteNonQuery();// if not successful, we will get a 0 back. Otherwise, 1.
+                conn.Close();
                 return ret;
             }
         }
 
-        // public void testQuery()
-        // {
-        //     // using (SqlCommand command = new SqlCommand("SELECT * FROM Customers", conn))
-        //     // {
-        //     //     conn.Open();
-        //     //     SqlDataReader? ret = command.ExecuteReader();
+        public int UpdateComputer(Player p)
+        {
+            using (SqlCommand command = new SqlCommand($"UPDATE Players SET Fname = @a, Lname = @b, Wins = @c, Losses = @d WHERE PlayerId = @x", conn))
+            {
+                command.Parameters.AddWithValue("@a", p.Fname);// add dynamic data like this to protect against SQL Injection.
+                command.Parameters.AddWithValue("@b", p.Lname);
+                command.Parameters.AddWithValue("@c", p.Wins);
+                command.Parameters.AddWithValue("@d", p.Losses);
+                command.Parameters.AddWithValue("@x", p.PlayerId);
 
-        //     //     while (ret.Read())
-        //     //     {
-        //     //         Console.WriteLine($"{ret.GetInt32(0)} - {ret[1]} - {ret[2]} - {ret[3]} ");
-        //     //     }
-        //     // }
+                conn.Open();
+                int ret = command.ExecuteNonQuery();// if not successful, we will get a 0 back. Otherwise, 1.
+                conn.Close();
+                //Console.WriteLine($"The ret is {ret}.");
+                return ret;
+            }
+        }
 
-        //     using (SqlCommand command = new SqlCommand($"SELECT FirstName, LastName FROM Customers WHERE FirstName = @x", conn))
-        //     {
-        //         command.Parameters.AddWithValue("@x", "John");
-        //         conn.Open();
-        //         SqlDataReader? ret = command.ExecuteReader();
+        public int PersistGame(Game r)
+        {
+            using (SqlCommand command = new SqlCommand($"INSERT INTO Games (GameId, NumTies, P1, P2, GameWinner_PlayerId) VALUES (@gameid, @numties, @p1, @p2, @gameWinner)", conn))
+            {
+                command.Parameters.AddWithValue("@gameid", r.GameId);// add dynamic data like this to protect against SQL Injection.
+                //command.Parameters.AddWithValue("@date", r.GameDate);
+                command.Parameters.AddWithValue("@numties", r.NumberOfTies);
+                command.Parameters.AddWithValue("@p1", r.P1.PlayerId);
+                command.Parameters.AddWithValue("@p2", r.P2.PlayerId);
+                command.Parameters.AddWithValue("@gameWinner", r.GameWinner.PlayerId);
+                conn.Open();
+                int ret = command.ExecuteNonQuery();
 
-        //         while (ret.Read())
-        //         {
-        //             Console.WriteLine($"{ret[0]} - {ret[1]}");
-        //             //when you are mapping the raw data from the Db, you need to place the data into you C3 Class object instance to use within your app.
-        //             // Customer c = new Customer() {
-        //             //   firstname = ret[1],
-        //             //   customerId = ret.GetInt32(0),//type def anything other than a string
-        //             //  };
+                if (ret == 1)
+                {
+                    conn.Close();
+                    return ret;
+                }
+                else
+                {
+                    conn.Close();
+                    return ret;
+                }
+            }
+        }
 
-        //             // return c;
-        //         }
-        //         conn.Close();
-        //     }
-        // }
+        public int PersistRounds(Round r)
+        {
+            using (SqlCommand command = new SqlCommand($"INSERT INTO Rounds VALUES (@RoundId, @p1Choice, @p2choice, @roundWinner, @gameId)", conn))
+            {
+                command.Parameters.AddWithValue("@RoundId", r.RoundId);// add dynamic data like this to protect against SQL Injection.
+                command.Parameters.AddWithValue("@p1Choice", (((int)r.P1Choice) - 1));
+                command.Parameters.AddWithValue("@p2choice", (((int)r.P2Choice) - 1));
+                command.Parameters.AddWithValue("@roundWinner", r.RoundWinner);
+                command.Parameters.AddWithValue("@gameId", r.GameId);
+                conn.Open();
+                int ret = command.ExecuteNonQuery();
+
+                if (ret == 1)
+                {
+                    conn.Close();
+                    return ret;
+                }
+                else
+                {
+                    conn.Close();
+                    return ret;
+                }
+            }
+        }
     }
 }
