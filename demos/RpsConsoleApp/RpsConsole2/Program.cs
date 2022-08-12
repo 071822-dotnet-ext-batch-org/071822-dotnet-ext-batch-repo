@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BusinessLayer;
 using Models;
 
@@ -8,7 +9,7 @@ namespace RpsConsole2
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)// 'Task' return type means 'void'
         {
             GamePlay gameplay = new GamePlay();
             // WHY KEEP A DB? - because maybe I want to add the ability to check out my stats without playing a game?
@@ -22,11 +23,16 @@ namespace RpsConsole2
             while (true)
             {
                 // this creates a new game within the GamePlay Class instance.
-                gameplay.NewGame();
+                await gameplay.NewGameAsync();
 
                 // get the users name
                 Console.WriteLine("What is your first and last name?");
-                bool playerAlreadyInList = gameplay.P1Name(Console.ReadLine().Split(" "));// [my,name,is,mark,moore]
+                bool playerAlreadyInList = await gameplay.P1NameAsync(Console.ReadLine().Split(" "));// [my,name,is,mark,moore]
+
+                // int y = 1;
+                // long x = y; // the reason you can assign an int to a long is bc you won't lose data.
+                // long z = 100000000;
+                // int zz = (int)z; //  you cannot implicitly convert a larger datatype to a smaller datatype bc you will lose data. You MUST do it EXPLICITLY.
 
                 if (playerAlreadyInList)
                 {
@@ -68,7 +74,7 @@ namespace RpsConsole2
                 }//end of 1 game
 
                 //call a method to finalize the game.
-                Game g = gameplay.FinalizeGame();
+                Game g = await gameplay.FinalizeGameAsync();
 
                 //tell the user the rounds played status.
                 Console.WriteLine($"So far, your record is {g.P1.Wins}/{g.P1.Losses} and the computer's record is {g.P2.Wins}/{g.P2.Losses}.");
@@ -131,10 +137,6 @@ namespace RpsConsole2
 
 
             //out of all rounds what is the how many of rock to paper to scissors
-
-
-
-
         }//EoM
     }//EoC
 }// EoN
