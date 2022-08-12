@@ -29,10 +29,10 @@ namespace BusinessLayer
         /// <summary>
         /// This will create a game and add the computer to the P2 spot.
         /// </summary>
-        public void NewGame()
+        public async Task NewGameAsync()
         {
             this._CurrentGame = new Game();
-            this.GetComputerIfExists();
+            await this.GetComputerIfExistsAsync();
         }
 
         /// <summary>
@@ -40,9 +40,9 @@ namespace BusinessLayer
         /// The repo layer will return null if hte computer isn't in the Db.
         /// Otherwise, return the computer object/
         /// </summary>
-        private void GetComputerIfExists()
+        private async Task GetComputerIfExistsAsync()
         {
-            Player? p = this._repo.GetComputerIfExists();//if this returns null, I'll create a guid and assign it to P2.PlayerId
+            Player? p = await this._repo.GetComputerIfExistsAsync();//if this returns null, I'll create a guid and assign it to P2.PlayerId
             if (p == null)
             {
                 //this._CurrentGame.P2.PlayerId = Guid.NewGuid();
@@ -64,7 +64,7 @@ namespace BusinessLayer
         /// </summary>
         /// <param name="playerNames"></param>
         /// <returns></returns>
-        public bool P1Name(string[] playerNames)
+        public async Task<bool> P1NameAsync(string[] playerNames)
         {
             #region no db code
             // if (playerNames.Length > 1)
@@ -101,7 +101,7 @@ namespace BusinessLayer
                 lname = "name";
             }
             // send the repo the real names or the defaulted names.
-            Player? p = _repo.P1Name(fname, lname);
+            Player? p = await _repo.P1NameAsync(fname, lname);
             if (p == null)
             {
                 this._CurrentGame.P1 = new Player(fname, lname);
@@ -255,32 +255,32 @@ namespace BusinessLayer
             return this._CurrentGame.NumberOfTies;
         }
 
-        public Game FinalizeGame()
+        public async Task<Game> FinalizeGameAsync()// this method serves as a 'manager' of the closedown procedures
         {
             //assign the gamewinner
             if (this.FinalizeStats())
             {
                 //STEP 1. Save the current p1 to the Db
-                if (!this.PersistPlayer(this._CurrentGame.P1))
+                if (!await this.PersistPlayerAsync(this._CurrentGame.P1))
                 {
                     throw new SystemException("There was a problem finalizing the game and all was lost.");
                 };
 
                 //STEP 2. Save the current p2 to the Db
-                if (!this.PersistPlayer(this._CurrentGame.P2))
+                if (!await this.PersistPlayerAsync(this._CurrentGame.P2))
                 {
                     throw new SystemException("There was a problem finalizing the game and all was lost.");
                 };
 
                 //STEP 3. add the game itself
-                if (this.PersistGame() != 1)
+                if (await this.PersistGameAsync() != 1)
                 {
                     throw new SystemException("There was a problem finalizing the game and all was lost.");
                 }
 
                 //STEP 4.
                 //add the rounds by calling the add Round method in a loop.
-                if (this.PersistRounds(this._CurrentGame.Rounds) != 1)
+                if (await this.PersistRoundsAsync(this._CurrentGame.Rounds) != 1)
                 {
                     throw new SystemException("There was a problem finalizing the game and all was lost.");
                 }
@@ -315,9 +315,9 @@ namespace BusinessLayer
             #endregion
         }
 
-        private int PersistGame()
+        private async Task<int> PersistGameAsync()
         {
-            if (this._repo.PersistGame(this._CurrentGame) != 1)
+            if (await this._repo.PersistGameAsync(this._CurrentGame) != 1)
             {
                 return 0;
             }
@@ -329,12 +329,12 @@ namespace BusinessLayer
         /// </summary>
         /// <param name="rounds"></param>
         /// <returns></returns>
-        private int PersistRounds(List<Round> rounds)
+        private async Task<int> PersistRoundsAsync(List<Round> rounds)
         {
             int ret = 0;
             foreach (Round r in rounds)
             {
-                ret = this._repo.PersistRounds(r);
+                ret = await this._repo.PersistRoundsAsync(r);
                 if (ret != 1)
                 {
                     return 0;
@@ -373,19 +373,16 @@ namespace BusinessLayer
         /// Theis mehtod returns true if both saves were successful.
         /// /// </summary>
         /// <returns></returns>
-        private bool PersistPlayer(Player p)
+        private async Task<bool> PersistPlayerAsync(Player p)
         {
             // if the player is there, we update its Data
             // if not, we insert the player.
-            if (this._repo.ExistsPlayerById(p.PlayerId))
+            if (await this._repo.ExistsPlayerByIdAsync(p.PlayerId))
             {
-                if (this._repo.UpdatePlayerById(p) != 1)
-                {
-                    return false;
-                }
+                if (await this._repo.UpdatePlayerByIdAsync(p) != 1) return false;
             }
             // this was a whole 7 line else/if statement combined into one line! :)
-            else if (this._repo.InsertNewPlayer(p) != 1)
+            else if (await this._repo.InsertNewPlayerAsync(p) != 1)
             {
                 return false;
             }
