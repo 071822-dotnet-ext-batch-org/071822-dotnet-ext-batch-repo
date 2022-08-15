@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Microsoft.Extensions.Logging;
+using Models;
 using RepoLayer;
 
 namespace BusinessLayer
@@ -12,8 +13,8 @@ namespace BusinessLayer
             while keep the endpoints the same and completely change the functionality, security, databases used, 
             or methodology of the method used b the main program.
         **/
-        private readonly adonetaccess _repo = new adonetaccess();
-
+        private readonly adonetaccess _repo;
+        private readonly MyCustomException _logger;
         private readonly Random _rand = new Random();// the Random class gets us a pseudorandom decimal between 0 and 1.
         // These List<>'s are analogous to saving the data permanently in a Db. (We aren't doing that... YET.)
         //create a List<Game> to hold all the games
@@ -25,6 +26,12 @@ namespace BusinessLayer
         private int player1wins = 0;//how many rounds p1 has won
         private int computerWins = 0;//how many rounds the compouter has won
         private Game _CurrentGame;
+
+        public GamePlay(adonetaccess repo, MyCustomException logger)
+        {
+            _repo = repo;
+            this._logger = logger;
+        }
 
         /// <summary>
         /// This will create a game and add the computer to the P2 spot.
@@ -46,6 +53,7 @@ namespace BusinessLayer
             if (p == null)
             {
                 //this._CurrentGame.P2.PlayerId = Guid.NewGuid();
+                this._logger.CheatingPlayer();
             }
             else
             {
@@ -101,11 +109,12 @@ namespace BusinessLayer
             //    lname = "name";
             //}
             // send the repo the real names or the defaulted names.
+
             Player? p = await _repo.P1NameAsync(fname, lname);
             if (p == null)
             {
                 this._CurrentGame.P1 = new Player(fname, lname);
-                return this._CurrentGame.P1;// because the player did not exist
+                return this._CurrentGame.P1;// because the player did not exist... AND STILL DOESN'T IN THE DB.
             }
             else
             {
@@ -117,6 +126,7 @@ namespace BusinessLayer
 
         public Player GetP2()
         {
+            this._logger.
             return this._CurrentGame.P2;
         }
 
@@ -361,9 +371,12 @@ namespace BusinessLayer
                 }
                 return true;
             }
-            catch (SystemException ex)
+            catch (MyCustomException ex)
             {
+
                 //probably ought to log this somewhere.
+                Console.WriteLine(ex.CheatingPlayer());
+                //you wojls REALLY be logging the results of hte exception 
                 return false;
             }
         }
@@ -417,5 +430,13 @@ namespace BusinessLayer
         //     _repo.testQuery();
         //     //there may be somethign logical to do here too...
         // }
+
+
+        //create a method to do whatever data manipulation you need done.
+        // call the Repo layer method to check if that Username/Password combo exists already
+        // if it already exists, return failure
+        // if that uname and pword are not already there, call the method to insert the new user.
+        // return the new user object
+
     }//EoC
 }//EoN
