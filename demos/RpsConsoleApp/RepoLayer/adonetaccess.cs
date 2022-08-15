@@ -261,5 +261,10 @@ namespace RepoLayer
                 }
             }
         }
-    }
-}
+
+        // 1. a method to see if a employee exists by taht uname and pword (after this, you'll call the method to insert the emplotee)
+
+        // 2. another method to insert an employee with what you've already verified (above) to be a unique uname and password.
+
+    }//EoC
+}//EoN
