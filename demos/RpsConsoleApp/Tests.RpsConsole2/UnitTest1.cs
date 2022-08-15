@@ -53,7 +53,7 @@ public class UnitTest1
         await g.NewGameAsync();
 
         //act - call P1Name(string[] playerNames)
-        bool b = await g.P1NameAsync(strArr);
+        Player b = await g.P1NameAsync("Mark", "Moore");
         Player p = g.GetP1();
 
         //assert

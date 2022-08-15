@@ -6,7 +6,7 @@ namespace RepoLayer
 {
     public class adonetaccess
     {
-        private static readonly SqlConnection conn = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        //private static readonly SqlConnection conn = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 
         /// <summary>
         /// This method will query the Db for a entity called "The Computer".
@@ -16,6 +16,7 @@ namespace RepoLayer
         /// <returns></returns>
         public Player? GetComputerIfExists()
         {
+            SqlConnection conn = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             using (SqlCommand command = new SqlCommand($"SELECT Top 1 PlayerId, Fname, Lname, Wins, Losses FROM Players WHERE Fname = 'The' AND Lname = 'Computer'", conn))
             {
                 conn.Open();
@@ -79,6 +80,7 @@ namespace RepoLayer
         /// <returns></returns>
         public async Task<bool> ExistsPlayerByIdAsync(Guid playerId)
         {
+            SqlConnection conn = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             using (SqlCommand command = new SqlCommand($"SELECT Top 1 PlayerId FROM Players WHERE PlayerId = @x", conn))
             {
                 command.Parameters.AddWithValue("@x", playerId);// add dynamic data like this to protect against SQL Injection.
@@ -105,6 +107,7 @@ namespace RepoLayer
         /// <returns></returns>
         public async Task<int> InsertNewPlayerAsync(Player p)
         {
+            SqlConnection conn = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             using (SqlCommand command = new SqlCommand($"INSERT INTO Players VALUES (@playerId, @fname, @lname, @wins, @losses)", conn))
             {
                 command.Parameters.AddWithValue("@fname", p.Fname);// add dynamic data like this to protect against SQL Injection.
@@ -172,6 +175,7 @@ namespace RepoLayer
         /// <param name="p"></param>
         public async Task<int> UpdatePlayerByIdAsync(Player p)
         {
+            SqlConnection conn = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             using (SqlCommand command = new SqlCommand($"UPDATE Players SET Fname = @a, Lname = @b, Wins = @c, Losses = @d WHERE PlayerId = @x", conn))
             {
                 command.Parameters.AddWithValue("@a", p.Fname);// add dynamic data like this to protect against SQL Injection.
@@ -207,6 +211,7 @@ namespace RepoLayer
 
         public async Task<int> PersistGameAsync(Game r)
         {
+            SqlConnection conn = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             using (SqlCommand command = new SqlCommand($"INSERT INTO Games (GameId, NumTies, P1, P2, GameWinner_PlayerId) VALUES (@gameid, @numties, @p1, @p2, @gameWinner)", conn))
             {
                 command.Parameters.AddWithValue("@gameid", r.GameId);// add dynamic data like this to protect against SQL Injection.
@@ -233,6 +238,7 @@ namespace RepoLayer
 
         public async Task<int> PersistRoundsAsync(Round r)
         {
+            SqlConnection conn = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             using (SqlCommand command = new SqlCommand($"INSERT INTO Rounds VALUES (@RoundId, @p1Choice, @p2choice, @roundWinner, @gameId)", conn))
             {
                 command.Parameters.AddWithValue("@RoundId", r.RoundId);// add dynamic data like this to protect against SQL Injection.
