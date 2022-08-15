@@ -64,7 +64,7 @@ namespace BusinessLayer
         /// </summary>
         /// <param name="playerNames"></param>
         /// <returns></returns>
-        public async Task<bool> P1NameAsync(string[] playerNames)
+        public async Task<Player> P1NameAsync(string fname = "default", string lname = "name")
         {
             #region no db code
             // if (playerNames.Length > 1)
@@ -83,35 +83,35 @@ namespace BusinessLayer
             // }
             #endregion
             //instead of the above, we will search the Db for this player.
-            string fname, lname;
+            //string fname, lname;
             // vette the array right now to the repo layer doesn't have to.
-            if (playerNames.Length > 1)
-            {
-                fname = playerNames[0];
-                lname = playerNames[1];
-            }
-            else if (playerNames.Length == 1)
-            {
-                fname = playerNames[0];
-                lname = "default";
-            }
-            else
-            {
-                fname = "default";
-                lname = "name";
-            }
+            //if (playerNames.Length > 1)
+            //{
+            //    fname = playerNames[0];
+            //    lname = playerNames[1];
+            //}
+            //else if (playerNames.Length == 1)
+            //{
+            //    fname = playerNames[0];
+            //    lname = "default";
+            //}
+            //else
+            //{
+            //    fname = "default";
+            //    lname = "name";
+            //}
             // send the repo the real names or the defaulted names.
             Player? p = await _repo.P1NameAsync(fname, lname);
             if (p == null)
             {
                 this._CurrentGame.P1 = new Player(fname, lname);
-                return false;// because the player did not exist
+                return this._CurrentGame.P1;// because the player did not exist
             }
             else
             {
                 this._CurrentGame.P1 = p;
                 //Console.WriteLine($"{p.Fname} {p.Lname} {p.Wins} {p.Losses}");
-                return true;// because the player already existed in the Db.
+                return this._CurrentGame.P1;// because the player already existed in the Db.
             }
         }
 

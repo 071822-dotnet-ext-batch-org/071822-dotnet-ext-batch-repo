@@ -44,9 +44,10 @@ namespace RepoLayer
 
         public async Task<Player?> GetComputerIfExistsAsync()
         {
-            using (SqlCommand command = new SqlCommand($"SELECT Top 1 PlayerId, Fname, Lname, Wins, Losses FROM Players WHERE Fname = 'The' AND Lname = 'Computer'", conn))
+            SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            using (SqlCommand command = new SqlCommand($"SELECT Top 1 PlayerId, Fname, Lname, Wins, Losses FROM Players WHERE Fname = 'The' AND Lname = 'Computer'", conn1))
             {
-                conn.Open();
+                conn1.Open();
                 SqlDataReader? ret = await command.ExecuteReaderAsync();// this version MIGHT run faster.....
 
                 if (ret.Read())
@@ -59,12 +60,12 @@ namespace RepoLayer
                         Wins = ret.GetInt32(3),
                         Losses = ret.GetInt32(4)
                     };
-                    conn.Close();
+                    conn1.Close();
                     return p;
                 }
                 else
                 {
-                    conn.Close();
+                    conn1.Close();
                     return null;
                 }
             }
@@ -136,12 +137,12 @@ namespace RepoLayer
         /// <returns></returns>
         public async Task<Player?> P1NameAsync(string fname, string lname)
         {
-            //string query = "SELECT FirstName, LastName, Wins, Losses FROM Players WHERE FirstName = @x AND Lname = @y";
-            using (SqlCommand command = new SqlCommand($"SELECT Top 1 PlayerId, Fname, Lname, Wins, Losses FROM Players WHERE Fname = @fname AND Lname = @lname", conn))
+            SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            using (SqlCommand command = new SqlCommand($"SELECT Top 1 PlayerId, Fname, Lname, Wins, Losses FROM Players WHERE Fname = @fname AND Lname = @lname", conn1))
             {
                 command.Parameters.AddWithValue("@fname", fname);// add dynamic data like this to protect against SQL Injection.
                 command.Parameters.AddWithValue("@lname", lname);
-                conn.Open();
+                conn1.Open();
                 SqlDataReader? ret = await command.ExecuteReaderAsync();
 
                 if (ret.Read())
@@ -152,12 +153,12 @@ namespace RepoLayer
                     p.Lname = ret.GetString(2);
                     p.Wins = ret.GetInt32(3);
                     p.Losses = ret.GetInt32(4);
-                    conn.Close();
+                    conn1.Close();
                     return p;
                 }
                 else
                 {
-                    conn.Close();
+                    conn1.Close();
                     return null;
                 }
             }
