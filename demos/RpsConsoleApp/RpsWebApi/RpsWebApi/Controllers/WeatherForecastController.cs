@@ -24,11 +24,11 @@ namespace RpsWebApi.Controllers
 
         [HttpGet("GetPlayerAsync")]
         [HttpGet("GetPlayerAsync/id")]
-        public async Task<ActionResult<int>> IndexAsync(int id=0 )
+        public async Task<ActionResult<int>> IndexAsync(int id = 0)
         {
-            if (id==1)
+            if (id == 1)
             {
-            return Created("", true);// use Created() to show that something was inserted into the Db successfully
+                return Created("", true);// use Created() to show that something was inserted into the Db successfully
             }
             else if (id == 0)
             {
@@ -36,7 +36,7 @@ namespace RpsWebApi.Controllers
             }
             else
             {
-                return BadRequest();
+                return 1;
             }
         }
 
@@ -45,24 +45,16 @@ namespace RpsWebApi.Controllers
         {
             this._gameplay.NewGameAsync();
             Player p = await this._gameplay.P1NameAsync(fname, lname);
-            return Created($"http://www.localhost:5001/players/{p.PlayerId}",p);
+            return Created($"http://www.localhost:5001/players/{p.PlayerId}", p);
 
         }
 
-
-
-        // this is an endpoint (Action Method)
-        //[HttpGet("GetWeatherForecast")]
-        //[HttpGet("GetWeatherForecast/Alternate")]
-        //public IEnumerable<WeatherForecast> Get()
-        //{
-        //    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //    {
-        //        Date = DateTime.Now.AddDays(index),
-        //        TemperatureC = Random.Shared.Next(-20, 55),
-        //        Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        //    })
-        //    .ToArray();
-        //}
+        [HttpPost("LoginPlayer")]
+        public async Task<ActionResult<Player>> P1NameAsync(PlayerDt+
+        {
+            this._gameplay.NewGameAsync();
+            Player p1 = await this._gameplay.P1NameAsync(p.Fname, p.Lname);
+            return Created($"http://www.localhost:5001/players/{p1.PlayerId}", p1);
+        }
     }
 }

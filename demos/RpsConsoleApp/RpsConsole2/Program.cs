@@ -27,8 +27,8 @@ namespace RpsConsole2
 
                 // get the users name
                 Console.WriteLine("What is your first and last name?");
-                bool playerAlreadyInList = await gameplay.P1NameAsync(Console.ReadLine().Split(" "));// [my,name,is,mark,moore]
-
+                bool playerAlreadyInList = false;
+                //playerAlreadyInList = await gameplay.P1NameAsync(Console.ReadLine().Split(" "));// [my,name,is,mark,moore]
                 // int y = 1;
                 // long x = y; // the reason you can assign an int to a long is bc you won't lose data.
                 // long z = 100000000;
