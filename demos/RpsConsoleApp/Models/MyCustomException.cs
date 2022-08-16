@@ -14,9 +14,9 @@ namespace Models
             throw new NotImplementedException();
         }
 
-        public Player CheatingPlayer()
+        public string CheatingPlayer(Player p)
         {
-            return new Player { Fname = "BadPlayer", Lname = "ReallyBadPlayer", };
+            return $"The player {p.Fname} {p.Lname} cheated.";
         }
 
         public bool IsEnabled(LogLevel logLevel)

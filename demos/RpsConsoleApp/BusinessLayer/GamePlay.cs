@@ -53,7 +53,7 @@ namespace BusinessLayer
             if (p == null)
             {
                 //this._CurrentGame.P2.PlayerId = Guid.NewGuid();
-                this._logger.CheatingPlayer();
+                this._logger.CheatingPlayer(p);
             }
             else
             {
@@ -126,7 +126,6 @@ namespace BusinessLayer
 
         public Player GetP2()
         {
-            this._logger.
             return this._CurrentGame.P2;
         }
 
@@ -375,8 +374,8 @@ namespace BusinessLayer
             {
 
                 //probably ought to log this somewhere.
-                Console.WriteLine(ex.CheatingPlayer());
-                //you wojls REALLY be logging the results of hte exception 
+                Console.WriteLine(ex.CheatingPlayer(this._CurrentGame.P1));
+                //you would REALLY be logging the results of hte exception 
                 return false;
             }
         }
