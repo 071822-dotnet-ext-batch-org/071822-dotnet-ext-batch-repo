@@ -126,7 +126,7 @@ namespace BusinessLayer
 
         public Player GetP2()
         {
-            this._logger.
+            //this._logger.
             return this._CurrentGame.P2;
         }
 
