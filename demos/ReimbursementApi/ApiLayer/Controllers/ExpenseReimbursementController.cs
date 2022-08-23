@@ -16,19 +16,46 @@ namespace ApiLayer.Controllers
         }
 
         /// <summary>
-        /// Get all the pending requests
+        /// Get all requests. 
+        /// Get a specific request
+        /// Get all requests of a specified type
         /// </summary>
         /// <returns></returns>
         [HttpGet("RequestsAsync")]//get all requests .
+        [HttpGet("RequestsAsync/{id}")]//get a specific request
         [HttpGet("RequestsAsync/{type}")]//get all of a type of request
-        //[HttpGet("RequestsAsync/{id}/{type?}")]// get all or a specific type and employee. You'll have to figure out how to structure the query so that the optional values are indeed optional
-        //[HttpGet("RequestsAsync/{id}")]// get all of a specific employees requests
-        public async Task<ActionResult<List<Request>>> RequestsAsync(int type, Guid? id)
+        public async Task<ActionResult<List<Request>>> RequestsAsync(Guid? id, int type = -1)
         {
-            List<Request> requestList = await this._businessLayer.RequestsAsync(type);
-            return Ok(requestList);//returns 200            
-            //return null;
+            //get all the Requests OR get all of a specific type
+            if (id == null)
+            {
+                List<Request> requestList = await this._businessLayer.RequestsAsync(type);// this method gets a request by type of request
+                return Ok(requestList);//returns 200            
+            }
+            else if (type == -1)
+            {
+                //TODO
+                // create a path to get all the requests o a specific type
+                List<Request> requestList = await this._businessLayer.RequestsAsync(type);
+                return Ok(requestList);//returns 200            
+            }
+            return null;
         }
+
+        /// <summary>
+        /// Get all requests of a specific user
+        /// Get all requests of a user and and by type of request
+        /// </summary>
+        /// <returns></returns>
+        // [HttpGet("RequestsAsync/{id}")]//get all of a type of request of an employee
+        // [HttpGet("RequestsAsync/{id}/{type}")]// get all of a specific type and employee.
+        // public async Task<ActionResult<List<Request>>> RequestsAsync(Guid id, int type = -1)
+        // {
+        //     //TODO
+        //     List<Request> requestList = await this._businessLayer.RequestsAsync(type);
+        //     return Ok(requestList);//returns 200            
+        //     //return null;
+        // }
 
 
         [HttpPut("UpdateRequestAsync")]
