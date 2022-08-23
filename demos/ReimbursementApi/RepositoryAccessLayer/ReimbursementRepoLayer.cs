@@ -5,6 +5,11 @@ namespace RepositoryAccessLayer
 {
     public class ReimbursementRepoLayer
     {
+        /// <summary>
+        /// this method gets a request by type of request
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public async Task<List<Request>> RequestsAsync(int type)
         {
             SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
@@ -14,10 +19,10 @@ namespace RepositoryAccessLayer
                 conn1.Open();
                 SqlDataReader? ret = await command.ExecuteReaderAsync();
                 List<Request> rList = new List<Request>();
-                while(ret.Read())
+                while (ret.Read())
                 {
-                    Request r = new Request((Guid)ret[0], (Guid)ret[1],ret.GetString(2), ret.GetDecimal(3),ret.GetInt32(4));
-                    rList.Add(r);                    
+                    Request r = new Request(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetInt32(4));
+                    rList.Add(r);
                 }
                 conn1.Close();
                 return rList;
@@ -25,7 +30,7 @@ namespace RepositoryAccessLayer
         }
 
         /// <summary>
-        /// 
+        /// This method will update a specific request
         /// </summary>
         /// <param name="employeeId"></param>
         /// <param name="status"></param>
@@ -37,7 +42,7 @@ namespace RepositoryAccessLayer
             using (SqlCommand command = new SqlCommand($"UPDATE Request SET Status = @status WHERE RequestID = @id", conn1))
             {
                 command.Parameters.AddWithValue("@id", requestId);// add dynamic data like this to protect against SQL Injection.
-                command.Parameters.AddWithValue("status",status);
+                command.Parameters.AddWithValue("status", status);
                 conn1.Open();
                 int ret = await command.ExecuteNonQueryAsync();
                 if (ret == 1)
@@ -61,6 +66,11 @@ namespace RepositoryAccessLayer
             }
         }
 
+        /// <summary>
+        /// this method takes a requestID and returns all the information about the submitter and the request.
+        /// </summary>
+        /// <param name="requestId"></param>
+        /// <returns></returns>
         private async Task<UpdatedRequestDto> UpdatedRequestByIdAsync(Guid requestId)
         {
             SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
@@ -81,6 +91,11 @@ namespace RepositoryAccessLayer
             }
         }
 
+        /// <summary>
+        /// This method returns true if the EmployeeID given is of a manager
+        /// </summary>
+        /// <param name="employeeID"></param>
+        /// <returns></returns>
         public async Task<bool> IsManagerAsync(Guid employeeID)
         {
             SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
@@ -98,5 +113,7 @@ namespace RepositoryAccessLayer
                 return false;
             }
         }
-    }
-}
+
+
+    }// EoC
+}//EoN
