@@ -21,25 +21,31 @@ namespace ApiLayer.Controllers
         /// Get all requests of a specified type
         /// </summary>
         /// <returns></returns>
-        [HttpGet("RequestsAsync")]//get all requests .
-        [HttpGet("RequestsAsync/{id}")]//get a specific request
-        [HttpGet("RequestsAsync/{type}")]//get all of a type of request
-        public async Task<ActionResult<List<Request>>> RequestsAsync(Guid? id, int type = -1)
+        [HttpGet("RequestsAllAsync")]//get all requests .
+        //[HttpGet("RequestsAsync/{type?}")]//get a specific request
+        //[HttpGet("RequestsAsync/{id?}")]//get all of a type of request
+        public async Task<ActionResult<List<Request>>> RequestsAsync(/*Guid? id, int type = -1*/)
         {
             //get all the Requests OR get all of a specific type
-            if (id == null)
-            {
-                List<Request> requestList = await this._businessLayer.RequestsAsync(type);// this method gets a request by type of request
+            //if (id == null)
+            //{
+            List<Request> requestList = await this._businessLayer.RequestsAsync(0);// this method gets a request by type of request
                 return Ok(requestList);//returns 200            
-            }
-            else if (type == -1)
-            {
-                //TODO
-                // create a path to get all the requests o a specific type
-                List<Request> requestList = await this._businessLayer.RequestsAsync(type);
-                return Ok(requestList);//returns 200            
-            }
-            return null;
+                //}
+            //else if (type == -1)
+            //{
+            //    //TODO
+            //    // create a path to get all the requests o a specific type
+            //    List<Request> requestList = await this._businessLayer.RequestsAsync(type);
+            //    return Ok(requestList);//returns 200          
+                    //}
+            //return null;
+        }
+
+        [HttpGet("sanitytest")]
+        public int RequestTest()
+        {
+            return 666;
         }
 
         /// <summary>
