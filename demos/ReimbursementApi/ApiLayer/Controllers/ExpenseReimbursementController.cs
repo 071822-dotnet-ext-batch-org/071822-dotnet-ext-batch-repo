@@ -21,31 +21,13 @@ namespace ApiLayer.Controllers
         /// Get all requests of a specified type
         /// </summary>
         /// <returns></returns>
-        [HttpGet("RequestsAllAsync")]//get all requests .
-        //[HttpGet("RequestsAsync/{type?}")]//get a specific request
+        [HttpGet("RequestsAsync")]//get all requests .
+        [HttpGet("RequestsAsync/{type}")]//get a specific request
         //[HttpGet("RequestsAsync/{id?}")]//get all of a type of request
-        public async Task<ActionResult<List<Request>>> RequestsAsync(/*Guid? id, int type = -1*/)
+        public async Task<ActionResult<List<Request>>> RequestsAsync(int type = -1)
         {
-            //get all the Requests OR get all of a specific type
-            //if (id == null)
-            //{
-            List<Request> requestList = await this._businessLayer.RequestsAsync(0);// this method gets a request by type of request
-                return Ok(requestList);//returns 200            
-                //}
-            //else if (type == -1)
-            //{
-            //    //TODO
-            //    // create a path to get all the requests o a specific type
-            //    List<Request> requestList = await this._businessLayer.RequestsAsync(type);
-            //    return Ok(requestList);//returns 200          
-                    //}
-            //return null;
-        }
-
-        [HttpGet("sanitytest")]
-        public int RequestTest()
-        {
-            return 666;
+            List<Request> requestList = await this._businessLayer.RequestsAsync(type);// this method gets a request by type of request
+            return Ok(requestList);
         }
 
         /// <summary>
@@ -53,16 +35,25 @@ namespace ApiLayer.Controllers
         /// Get all requests of a user and and by type of request
         /// </summary>
         /// <returns></returns>
-        // [HttpGet("RequestsAsync/{id}")]//get all of a type of request of an employee
-        // [HttpGet("RequestsAsync/{id}/{type}")]// get all of a specific type and employee.
-        // public async Task<ActionResult<List<Request>>> RequestsAsync(Guid id, int type = -1)
-        // {
-        //     //TODO
-        //     List<Request> requestList = await this._businessLayer.RequestsAsync(type);
-        //     return Ok(requestList);//returns 200            
-        //     //return null;
-        // }
+        [HttpGet("RequestsAsync/{flag}/{id}")]//if the flag is 0, get request by requestID, if 1, get request by employeeID
+        [HttpGet("RequestsAsync/{flag}/{id}/{type}")]// if flag is 2, get requests by type and EmployeeID.
+        public async Task<ActionResult<List<Request>>> RequestsAsync(int flag, Guid id, int type = -1)
+        {
+            // TODO create a new action method to fetch a request by it's id.
 
+            if (flag == 1)
+            {
+                List<UpdatedRequestDto> requestList = await this._businessLayer.RequestsByIdAsync(flag, id);
+                return Ok(requestList);//returns 200
+            }
+            else
+            {
+                //the flag is other than 0 or 1, get all requests of a specific type  by the employee
+                List<Request> requestList = await this._businessLayer.RequestsByEmpAndId(id, type);
+                return Ok(requestList);
+            }
+
+        }
 
         [HttpPut("UpdateRequestAsync")]
         public async Task<ActionResult<UpdatedRequestDto>> JimmyAsync(ApprovalDto approval)
