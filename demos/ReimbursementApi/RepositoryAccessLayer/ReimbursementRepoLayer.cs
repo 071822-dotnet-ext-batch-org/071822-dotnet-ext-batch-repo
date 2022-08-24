@@ -30,6 +30,29 @@ namespace RepositoryAccessLayer
         }
 
         /// <summary>
+        /// this method gets all requests
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public async Task<List<Request>> RequestsAsync()
+        {
+            SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Request", conn1))
+            {
+                conn1.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                List<Request> rList = new List<Request>();
+                while (ret.Read())
+                {
+                    Request r = new Request(ret.GetGuid(0), ret.GetGuid(1), ret.GetString(2), ret.GetDecimal(3), ret.GetInt32(4));
+                    rList.Add(r);
+                }
+                conn1.Close();
+                return rList;
+            }
+        }
+
+        /// <summary>
         /// This method will update a specific request
         /// </summary>
         /// <param name="employeeId"></param>
@@ -114,6 +137,24 @@ namespace RepositoryAccessLayer
             }
         }
 
-
+        public async Task<List<UpdatedRequestDto>> RequestsByEmpIdAsync(Guid id)
+        {
+            SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            using (SqlCommand command = new SqlCommand($"SELECT RequestID, FirstName, LastName, Status FROM [dbo].[Request]" +
+                $" LEFT JOIN Employees ON FK_EmployeeId = EmployeeID WHERE FK_EmployeeId = @id", conn1))
+            {
+                command.Parameters.AddWithValue("@id", id);// add dynamic data like this to protect against SQL Injection.
+                conn1.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                List<UpdatedRequestDto> list = new List<UpdatedRequestDto>();
+                while (ret.Read())
+                {
+                    UpdatedRequestDto r = new UpdatedRequestDto(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3));
+                    list.Add(r);
+                }
+                conn1.Close();
+                return list;
+            }
+        }
     }// EoC
 }//EoN
