@@ -7,12 +7,12 @@ ENV ASPNETCORE_URLS=http://+:5222
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["ApiLayer.sln", "."]
-COPY ["ApiLayer\ApiLayer.csproj", "ApiLayer/"]
+COPY ["ApiLayer/ApiLayer.csproj", "ApiLayer/"]
 COPY ["BusinessLayer/BusinessLayer.csproj","BusinessLayer/"]
 COPY ["ModelsLayer/ModelsLayer.csproj","ModelsLayer/"]
 COPY ["RepositoryAccessLayer/RepositoryAccessLayer.csproj","RepositoryAccessLayer/"]
 
-RUN dotnet restore "ApiLayer\ApiLayer.csproj"
+RUN dotnet restore ApiLayer\ApiLayer.csproj
 
 #does this create new folders beside the folders created above?
 #COPY . .
