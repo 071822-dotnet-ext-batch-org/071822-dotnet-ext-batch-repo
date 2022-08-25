@@ -4,6 +4,7 @@ WORKDIR /app
 EXPOSE 5000
 ENV ASPNETCORE_URLS=http://+:5000
 
+#this is a demo comment
 # Copy all the .csproj files into container file system 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
