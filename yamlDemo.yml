@@ -2,16 +2,35 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
-
+---
 trigger:
 - main
 
 pool:
   vmImage: ubuntu-latest
 
-MyObj:
-  container: "Jim"
-  notacontainer: 'jerry'
+  MyObj:
+    container: "Jim"
+    notacontainer: 'jerry'
+
+  doe: "a deer, a female deer"
+  ray: "a drop of golden sun"
+  pi: 3.14159
+  xmas: true
+  french-hens: 3
+  calling-birds:
+   - huey
+   - dewey
+   - louie
+   - fred
+  xmas-fifth-day:
+   calling-birds: four
+   french-hens: 3
+   golden-rings: 5
+   partridges:
+     count: 1
+     location: "a pear tree"
+   turtle-doves: two
 
 steps:
 - script: echo Hello, world!
