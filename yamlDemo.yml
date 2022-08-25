@@ -9,9 +9,11 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-  MyObj:
-    container: "Jim"
-    notacontainer: 'jerry'
+variables:
+  container:
+    test: test
+    num: 1
+  notacontainer: 'jerry'
 
   doe: "a deer, a female deer"
   ray: "a drop of golden sun"
@@ -42,4 +44,4 @@ steps:
   displayName: 'Run a multi-line script'
 
 
-- script: echo $(vmImage) is not $(Build.BuildId).
+- script: echo $(container.test) is not $(Build.BuildId).
