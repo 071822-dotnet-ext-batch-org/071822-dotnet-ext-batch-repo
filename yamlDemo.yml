@@ -42,4 +42,4 @@ steps:
   displayName: 'Run a multi-line script'
 
 
-- script: echo $(doe) is not $(calling-birds).
+- script: echo $(container) is not $(calling-birds).
