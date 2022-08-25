@@ -14,7 +14,7 @@ variables:
   environ: It's a dev environ
 
 stages:
-- stage:
+- stage: build
   jobs:
   - job:
     steps:
