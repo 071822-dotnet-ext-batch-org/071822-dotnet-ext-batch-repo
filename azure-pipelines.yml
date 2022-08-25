@@ -90,7 +90,19 @@ steps:
     projects: '$(solution)'
     zipAfterPublish: true
 
-
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Free Trial(869ec894-618e-45ae-bdc1-62450b97e1ec)'
+    appType: 'webApp'
+    WebAppName: '071822testAppa'
+    deployToSlotOrASE: true
+    ResourceGroupName: '071822test_RG'
+    SlotName: 'production'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    enableCustomDeployment: true
+    DeploymentType: 'zipDeploy'
+    TakeAppOfflineFlag: false
 
 
 # - task: AzureRmWebAppDeployment@4
