@@ -1,0 +1,99 @@
+
+pr: none
+trigger:
+  branches:
+    include:
+    - main
+#the below is required only if you have multiple .sln files in your repo.
+  paths:
+    include:
+    - Demos/ReimbursementApi
+
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: 'Demos/ReimbursementApi/ApiLayer.sln' 
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+
+#this installs the newest SDK for this build
+steps:
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.x'
+    # performMultiLevelLookup: true
+    # includePreviewVersions: false # Required 'true' to use preview versions
+
+- task: UseDotNet@2
+  displayName: 'Install .NET Runtime'
+  inputs:
+    packageType: 'runtime'
+    version: '4.x'
+    # performMultiLevelLookup: true
+
+
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+#this must go before the 'build' task.
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: '03012021BatchServiceToken1'
+    organization: '03012021batch'
+    scannerMode: 'MSBuild'
+    projectKey: '03012021Batch_03012021BatchPipelineDemo'
+    projectName: '03012021BatchPipelineDemo'
+
+#this will restore and build the directory.
+- task: DotNetCoreCLI@2
+  displayName: 'building'
+  inputs:
+    command: 'build'
+    projects: 'Demos/ReimbursementApi/*.sln'
+    workingDirectory: 'Demos/ReimbursementApi'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: 'Demos/ReimbursementApi/ApiLayer.sln'
+    arguments: '--configuration $(buildConfiguration) --collect "Code Coverage"'
+    testRunTitle: 'Dotnet tests running'
+    workingDirectory: 'Demos/ReimbursementApi'
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '**/coburtura/coverage.xml'
+
+- task: SonarCloudAnalyze@1
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publishing'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    # modifyOutputPath: false
+    # workingDirectory: 'Demos/JavaScriptWithDotnetAPI/memesaver'
+    projects: '$(solution)'
+    zipAfterPublish: true
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure subscription 1(5d150957-9944-40b9-b9e9-2a32c983a1f8)'
+    appType: 'webApp'
+    WebAppName: 'memesaver'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
