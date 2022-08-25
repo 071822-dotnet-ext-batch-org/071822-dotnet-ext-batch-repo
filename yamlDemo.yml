@@ -2,7 +2,7 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
----
+
 trigger:
 - main
 
@@ -42,4 +42,4 @@ steps:
   displayName: 'Run a multi-line script'
 
 
-- script: echo $(container) is not $(calling-birds).
+- script: echo $(vmImage) is not $(Build.BuildId).
