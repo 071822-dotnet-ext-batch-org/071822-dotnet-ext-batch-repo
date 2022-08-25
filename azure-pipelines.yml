@@ -44,13 +44,13 @@ steps:
     restoreSolution: '$(solution)'
 
 #this must go before the 'build' task.
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: '03012021BatchServiceToken1'
-    organization: '03012021batch'
-    scannerMode: 'MSBuild'
-    projectKey: '03012021Batch_03012021BatchPipelineDemo'
-    projectName: '03012021BatchPipelineDemo'
+# - task: SonarCloudPrepare@1
+#   inputs:
+#     SonarCloud: '03012021BatchServiceToken1'
+#     organization: '03012021batch'
+#     scannerMode: 'MSBuild'
+#     projectKey: '03012021Batch_03012021BatchPipelineDemo'
+#     projectName: '03012021BatchPipelineDemo'
 
 #this will restore and build the directory.
 - task: DotNetCoreCLI@2
@@ -61,24 +61,24 @@ steps:
     workingDirectory: 'Demos/ReimbursementApi'
     arguments: '--configuration $(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'test'
-    projects: 'Demos/ReimbursementApi/ApiLayer.sln'
-    arguments: '--configuration $(buildConfiguration) --collect "Code Coverage"'
-    testRunTitle: 'Dotnet tests running'
-    workingDirectory: 'Demos/ReimbursementApi'
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: 'test'
+#     projects: 'Demos/ReimbursementApi/ApiLayer.sln'
+#     arguments: '--configuration $(buildConfiguration) --collect "Code Coverage"'
+#     testRunTitle: 'Dotnet tests running'
+#     workingDirectory: 'Demos/ReimbursementApi'
 
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: 'Cobertura'
-    summaryFileLocation: '**/coburtura/coverage.xml'
+# - task: PublishCodeCoverageResults@1
+#   inputs:
+#     codeCoverageTool: 'Cobertura'
+#     summaryFileLocation: '**/coburtura/coverage.xml'
 
-- task: SonarCloudAnalyze@1
+# - task: SonarCloudAnalyze@1
 
-- task: SonarCloudPublish@1
-  inputs:
-    pollingTimeoutSec: '300'
+# - task: SonarCloudPublish@1
+#   inputs:
+#     pollingTimeoutSec: '300'
 
 - task: DotNetCoreCLI@2
   displayName: 'Publishing'
@@ -90,10 +90,13 @@ steps:
     projects: '$(solution)'
     zipAfterPublish: true
 
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Azure subscription 1(5d150957-9944-40b9-b9e9-2a32c983a1f8)'
-    appType: 'webApp'
-    WebAppName: 'memesaver'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+
+
+# - task: AzureRmWebAppDeployment@4
+#   inputs:
+#     ConnectionType: 'AzureRM'
+#     azureSubscription: 'Azure subscription 1(5d150957-9944-40b9-b9e9-2a32c983a1f8)'
+#     appType: 'webApp'
+#     WebAppName: 'memesaver'
+#     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
