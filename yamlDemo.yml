@@ -10,14 +10,12 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-- name: one
-  value: initialValue
-- name: environ
-  value: "It's a dev environ"
+  one: initialValue
+  environ: "It's a dev environ"
 
 stages:
 - stage:
   jobs:
   - job:
     steps:
-    - script: echo my stuff is $(one) amnd $(environ)
+    - script: echo my stuff is $(variables.one) and $(environ)
