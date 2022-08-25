@@ -42,4 +42,4 @@ steps:
   displayName: 'Run a multi-line script'
 
 
-- script: echo $(MyObj.container) is not $(MyObj.notacontainer).
+- bash: echo $(partridges.location) is not $(MyObj.notacontainer).
