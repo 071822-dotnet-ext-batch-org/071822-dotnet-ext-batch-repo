@@ -11,7 +11,7 @@ pool:
 
 variables:
   one: initialValue
-  environ: "It's a dev environ"
+  environ: It's a dev environ
 
 stages:
 - stage:
