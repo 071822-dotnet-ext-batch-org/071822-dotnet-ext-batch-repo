@@ -90,6 +90,7 @@ steps:
     projects: '$(solution)'
     zipAfterPublish: true
 
+#below is the new deploy to the Free Trial app I made outside of revature.
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
@@ -104,7 +105,7 @@ steps:
     DeploymentType: 'zipDeploy'
     TakeAppOfflineFlag: false
 
-
+#below is the original deployment
 # - task: AzureRmWebAppDeployment@4
 #   inputs:
 #     ConnectionType: 'AzureRM'
