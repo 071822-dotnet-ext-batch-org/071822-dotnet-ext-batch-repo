@@ -72,7 +72,7 @@ stages:
 - stage: test
   jobs:
   - job: test_the_app
-    steps:
+    #steps:
     # - task: VSTest@2
     #   inputs:
     #     platform: '$(buildPlatform)'
