@@ -3,32 +3,107 @@
 # Add steps that publish symbols, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
+# trigger:
+# - main
+
+# this pipeline will only trigger when any change on the 
+# path demos/reimbursementApi occurs
+pr: none
 trigger:
-- main
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - demos/ReimbursementApi
 
 pool:
   vmImage: 'windows-latest'
 
+# any value you use more than  once should be a variable
 variables:
   solution: 'demos/ReimbursementApi/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  workingDirectory: demos/ReimbursementApi
 
-steps:
-- task: NuGetToolInstaller@1
+stages:
+- stage: prep
+  jobs:
+  - job: sdk_and_nuget_download # can't have a space here?????
+    displayName: download the most current SDK 
+    steps:
+    - task: UseDotNet@2
+      displayName: get the sdk
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'    
+    - task: NuGetToolInstaller@1
+      inputs:
+        versionSpec: 
+        checkLatest: true
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+# this is the build stage        
+- stage: build
+  jobs:
+  - job: job1
+    steps:
+    - task: NuGetCommand@2
+      displayName: restore_the_app
+      inputs:
+        command: 'restore'
+        restoreSolution: '$(solution)'
+    - task: DotNetCoreCLI@2
+      displayName: build_the_app
+      inputs:
+        command: 'build'
+        projects: '$(solution)'
+        arguments: '--configuration $(buildConfiguration)'
+        workingDirectory: '$(workingDirectory)'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    # - task: VSBuild@1
+    #   inputs:
+    #     solution: '$(solution)'
+    #     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    #     platform: '$(buildPlatform)'
+    #     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+#testing tasks go there
+- stage: test
+  jobs:
+  - job: test_the_app
+    steps:
+    # - task: VSTest@2
+    #   inputs:
+    #     platform: '$(buildPlatform)'
+    #     configuration: '$(buildConfiguration)'
+
+#publish the app
+- stage: publish
+  jobs:
+  - job: publish_the_app
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: publishing_task
+      inputs:
+        command: 'publish'
+        publishWebProjects: true
+        workingDirectory: '$(workingDirectory)'
+        projects: $(solution)
+        zipAfterPublish: true
+
+# - stage: deploy
+#   jobs:
+#   - job: deploy_the_app
+#     steps:
+#     - task: AzureRmWebAppDeployment@4
+#       inputs:
+#         ConnectionType: 'AzureRM'
+#         appType: 'webApp'
+#         WebAppName: 'placeholder'
+#         deployToSlotOrASE: true
+#         ResourceGroupName: 'placeholder'
+#         SlotName: 'production'
+#         packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+
