@@ -52,7 +52,7 @@ stages:
         echo Add other tasks to build, test, and deploy your project.
         echo My name is Earl!
       displayName: 'Run a multi-line script'
-  - job: test.job2
+  - job: test_job2
     dependsOn:
     steps:
     - script: echo This is job2
@@ -62,7 +62,7 @@ stages:
       displayName: 'Run a multi-line script'
 - stage: deploy
   jobs:
-  - job: deploy\.job1
+  - job: deploy_job1
     steps:
     - script: echo Hello, I\'m deploy job1!
       displayName: 'deploy stage'
@@ -70,7 +70,7 @@ stages:
         echo Add other tasks to build, test, and deploy your project.
         echo My name is Earl!
       displayName: 'Run a multi-line script'
-  - job: deploy\.job2
+  - job: deploy_job2
     dependsOn:
     steps:
     - script: echo This is deplopy.job2
