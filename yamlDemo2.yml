@@ -25,7 +25,7 @@ stages:
 - stage: build
 #jobs run in parallel (asynchronously)
   jobs:
-  - job: build.job1
+  - job: build_job1
     steps:
     - script: echo Hello, world!
       displayName: 'Run a one-line script'
@@ -33,7 +33,7 @@ stages:
         echo Add other tasks to build, test, and deploy your project.
         echo My name is Earl!
       displayName: 'Run a multi-line script'
-  - job: build.job2
+  - job: build_job2
     dependsOn: job1
     steps:
     - script: echo This is job2
@@ -44,7 +44,7 @@ stages:
 
 - stage: test
   jobs:
-  - job: test.job1
+  - job: test_job1
     steps:
     - script: echo Hello, world!
       displayName: 'Run a one-line script'
