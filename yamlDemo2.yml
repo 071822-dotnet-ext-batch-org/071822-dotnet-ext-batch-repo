@@ -34,7 +34,7 @@ stages:
         echo My name is Earl!
       displayName: 'Run a multi-line script'
   - job: build_job2
-    dependsOn: job1
+    dependsOn: build_job1
     steps:
     - script: echo This is job2
       displayName: 'Run a one-line script'
