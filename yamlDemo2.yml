@@ -3,8 +3,10 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+# normally, you can 
 # trigger:
 # - main
+
 pr: none
 trigger:
   branches:
@@ -18,11 +20,20 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+jobs:
+- job: job1
+  steps:
+  - script: echo Hello, world!
+    displayName: 'Run a one-line script'
+  - script: |
+      echo Add other tasks to build, test, and deploy your project.
+      echo My name is Earl!
+      displayName: 'Run a multi-line script'
+- job: job2
+  steps:
+  - script: echo This is job2
+    displayName: 'Run a one-line script'
+  - script: |
+      echo Add other tasks to build, test, and deploy your project.
+    displayName: 'Run a multi-line script'
