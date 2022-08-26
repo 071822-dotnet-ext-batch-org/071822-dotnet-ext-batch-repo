@@ -7,7 +7,7 @@
 # - main
 
 # this pipeline will only trigger when any change on the 
-# path demos/reimbursementApi occurs
+# path demos/reimbursementApi in main branch occurs
 pr: none
 trigger:
   branches:
