@@ -62,7 +62,7 @@ stages:
         echo Add other tasks to build, test, and deploy your project.
       displayName: 'Run a multi-line script'
 - stage: deploy
-  dependsOn: test_job1
+  dependsOn: build
   jobs:
   - job: deploy_job1
     steps:
