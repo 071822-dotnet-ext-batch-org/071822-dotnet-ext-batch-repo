@@ -68,10 +68,12 @@ stages:
     steps:
     - script: echo Hello, I\'m deploy job1!
       displayName: 'deploy stage'
-    - script: |
-        echo Add other tasks to build, test, and deploy your project.
-        echo My name is Earl!
-      displayName: 'Run a multi-line script'
+    - script: echo The job status is $(Agent.JobStatus)
+      displayName: 'printing out the job status'
+    - bash: | 
+        echo  The access token is $(System.AccessToken), the agent build dir is $(Agent.BuildDirectory)
+        echo The job status is $(Agent.JobStatus)
+      displayName: 'Run a multi-line bash script'
   - job: deploy_job2
     dependsOn: deploy_job1
     steps:
@@ -79,4 +81,4 @@ stages:
       displayName: 'Run a one-line script'
     - script: |
         echo Add other tasks to build, test, and deploy your project.
-      displayName: 'Run a multi-line script'
+      displayName: 'Run a multi-line script showing the job status $(Agent.JobStatus)'
