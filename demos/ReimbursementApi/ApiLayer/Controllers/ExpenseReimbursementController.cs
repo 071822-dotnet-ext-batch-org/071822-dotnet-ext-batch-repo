@@ -9,10 +9,10 @@ namespace ApiLayer.Controllers
     [ApiController]
     public class ExpenseReimbursementController : ControllerBase
     {
-        private readonly ReimbursementBusinessLayer _businessLayer;
-        public ExpenseReimbursementController()
+        private readonly IReimbursementBusinessLayer _businessLayer;
+        public ExpenseReimbursementController(IReimbursementBusinessLayer rbl)
         {
-            this._businessLayer = new ReimbursementBusinessLayer();
+            this._businessLayer = rbl;
         }
 
         /// <summary>

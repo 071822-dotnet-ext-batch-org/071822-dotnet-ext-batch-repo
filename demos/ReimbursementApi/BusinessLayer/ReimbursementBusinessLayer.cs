@@ -4,13 +4,13 @@ using ModelsLayer;
 
 namespace BusinessLayer
 {
-    public class ReimbursementBusinessLayer
+    public class ReimbursementBusinessLayer : IReimbursementBusinessLayer
     {
 
-        private readonly ReimbursementRepoLayer _repoLayer;
-        public ReimbursementBusinessLayer()
+        private readonly IReimbursementRepoLayer _repoLayer;
+        public ReimbursementBusinessLayer(IReimbursementRepoLayer irrl)
         {
-            this._repoLayer = new ReimbursementRepoLayer();
+            this._repoLayer = irrl;
         }
 
         /// <summary>

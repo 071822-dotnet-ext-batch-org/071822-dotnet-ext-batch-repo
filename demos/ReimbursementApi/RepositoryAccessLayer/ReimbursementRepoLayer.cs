@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 
 namespace RepositoryAccessLayer
 {
-    public class ReimbursementRepoLayer
+    public class ReimbursementRepoLayer : IReimbursementRepoLayer
     {
         /// <summary>
         /// this method gets a request by type of request
