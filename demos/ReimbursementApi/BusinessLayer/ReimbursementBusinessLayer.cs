@@ -6,11 +6,23 @@ namespace BusinessLayer
 {
     public class ReimbursementBusinessLayer : IReimbursementBusinessLayer
     {
-
         private readonly IReimbursementRepoLayer _repoLayer;
         public ReimbursementBusinessLayer(IReimbursementRepoLayer irrl)
         {
             this._repoLayer = irrl;
+        }
+
+        /// <summary>
+        /// This method takes a Guid representing a specific request.
+        /// If the id is found, a the request data is returned
+        /// If not, returns null.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<UpdatedRequestDto> RequestById(Guid id)
+        {
+            UpdatedRequestDto r = await this._repoLayer.UpdatedRequestByIdAsync(id);
+            return r;
         }
 
         /// <summary>
@@ -32,9 +44,11 @@ namespace BusinessLayer
             }
         }
 
-        public async Task<List<Request>> RequestsByEmpAndId(Guid id, int type)
+        public async Task<List<UpdatedRequestDto>> RequestsByEmpAndType(Guid id, int type)
         {
-            throw new NotImplementedException();
+            // call a method that returns all the rrequests by a certain employeeID
+            List<UpdatedRequestDto> r = await this._repoLayer.RequestsByEmpAndType(id, type);
+            return r;
         }
 
         /// <summary>
@@ -69,5 +83,6 @@ namespace BusinessLayer
             }
             else return null;
         }
-    }
-}
+
+    }//EoC
+}//EoN

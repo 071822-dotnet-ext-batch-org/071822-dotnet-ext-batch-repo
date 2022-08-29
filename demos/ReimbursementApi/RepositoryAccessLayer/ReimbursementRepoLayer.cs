@@ -94,7 +94,7 @@ namespace RepositoryAccessLayer
         /// </summary>
         /// <param name="requestId"></param>
         /// <returns></returns>
-        private async Task<UpdatedRequestDto> UpdatedRequestByIdAsync(Guid requestId)
+        public async Task<UpdatedRequestDto> UpdatedRequestByIdAsync(Guid requestId)
         {
             SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             using (SqlCommand command = new SqlCommand($"SELECT RequestID, FirstName, LastName, Status FROM [dbo].[Employees]" +
@@ -105,7 +105,7 @@ namespace RepositoryAccessLayer
                 SqlDataReader? ret = await command.ExecuteReaderAsync();
                 if (ret.Read())
                 {
-                    UpdatedRequestDto r = new UpdatedRequestDto(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3));
+                    UpdatedRequestDto r = new UpdatedRequestDto(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetString(3), ret.GetInt32(4));
                     conn1.Close();
                     return r;
                 }
@@ -149,7 +149,28 @@ namespace RepositoryAccessLayer
                 List<UpdatedRequestDto> list = new List<UpdatedRequestDto>();
                 while (ret.Read())
                 {
-                    UpdatedRequestDto r = new UpdatedRequestDto(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetInt32(3));
+                    UpdatedRequestDto r = new UpdatedRequestDto(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetString(3), ret.GetInt32(4));
+                    list.Add(r);
+                }
+                conn1.Close();
+                return list;
+            }
+        }
+
+        public async Task<List<UpdatedRequestDto>> RequestsByEmpAndType(Guid id, int type)
+        {
+            SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            using (SqlCommand command = new SqlCommand($"SELECT RequestID, FirstName, LastName, Details, Status FROM [dbo].[Request]" +
+                $" LEFT JOIN Employees ON FK_EmployeeId = EmployeeID WHERE FK_EmployeeId = @id AND Status = @status", conn1))
+            {
+                command.Parameters.AddWithValue("@id", id);// add dynamic data like this to protect against SQL Injection.
+                command.Parameters.AddWithValue("@status", type);
+                conn1.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                List<UpdatedRequestDto> list = new List<UpdatedRequestDto>();
+                while (ret.Read())
+                {
+                    UpdatedRequestDto r = new UpdatedRequestDto(ret.GetGuid(0), ret.GetString(1), ret.GetString(2), ret.GetString(3), ret.GetInt32(4));
                     list.Add(r);
                 }
                 conn1.Close();
