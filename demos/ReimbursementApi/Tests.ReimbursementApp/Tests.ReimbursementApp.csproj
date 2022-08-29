@@ -21,4 +21,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RepositoryAccessLayer\RepositoryAccessLayer.csproj" />
+    <ProjectReference Include="..\ModelsLayer\ModelsLayer.csproj" />
+  </ItemGroup>
+
 </Project>
