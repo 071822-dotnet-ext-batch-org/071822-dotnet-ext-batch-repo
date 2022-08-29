@@ -91,7 +91,7 @@ stages:
 
 #publish the app
 - stage: publish
-  dependsOn: build
+  dependsOn: test
   jobs:
   - job: publish_the_app
     steps:
