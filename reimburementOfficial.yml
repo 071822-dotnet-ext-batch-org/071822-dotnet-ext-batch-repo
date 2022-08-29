@@ -20,7 +20,8 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
-# any value you use more than  once should be a variable
+# DRY! - any value you use more than once should be a variable
+# the path is a relative path from the .yaml file
 variables:
   solution: 'demos/ReimbursementApi/*.sln'
   buildPlatform: 'Any CPU'
@@ -42,6 +43,13 @@ stages:
       inputs:
         versionSpec: 
         checkLatest: true
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: '071822batch_SonarCloudServiceConnection'
+        organization: '071822dotnetbatch'
+        scannerMode: 'MSBuild'
+        projectKey: '071822dotnetbatch_071822batchtest'
+        projectName: '071822batchtest'
 
 # this is the build stage        
 - stage: build
@@ -61,23 +69,25 @@ stages:
         arguments: '--configuration $(buildConfiguration)'
         workingDirectory: '$(workingDirectory)'
 
-    # - task: VSBuild@1
-    #   inputs:
-    #     solution: '$(solution)'
-    #     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    #     platform: '$(buildPlatform)'
-    #     configuration: '$(buildConfiguration)'
-
 #testing tasks go there
 - stage: test
   dependsOn: build
   jobs:
   - job: test_the_app
-    #steps:
-    # - task: VSTest@2
-    #   inputs:
-    #     platform: '$(buildPlatform)'
-    #     configuration: '$(buildConfiguration)'
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'test'
+        projects: '$(solution)'
+        arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+        testRunTitle: 'Dotnet testing in progress'
+        workingDirectory: '$(workingDirectory)'
+    - task: PublishCodeCoverageResults@1
+      inputs:
+        codeCoverageTool: 'Cobertura'
+        summaryFileLocation: '**/coburtura/coverage.xml'
+        failIfCoverageEmpty: true
+    - task: SonarCloudAnalyze@1
 
 #publish the app
 - stage: publish
@@ -85,6 +95,10 @@ stages:
   jobs:
   - job: publish_the_app
     steps:
+    # publishing is optional but allows you to decorate the PRs later.
+    - task: SonarCloudPublish@1
+      inputs:
+        pollingTimeoutSec: '300'
     - task: DotNetCoreCLI@2
       displayName: publishing_task
       inputs:
