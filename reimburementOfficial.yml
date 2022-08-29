@@ -53,6 +53,7 @@ stages:
 
 # this is the build stage        
 - stage: build
+  dependsOn: prep
   jobs:
   - job: job1
     steps:
