@@ -16,8 +16,7 @@ namespace ApiLayer.Controllers
         }
 
         /// <summary>
-        /// Get all requests. 
-        /// Get a specific request
+        /// Get all requests.
         /// Get all requests of a specified type
         /// </summary>
         /// <returns></returns>
@@ -37,7 +36,7 @@ namespace ApiLayer.Controllers
         /// <returns></returns>
         [HttpGet("RequestsAsync/{flag}/{id}")]//if the flag is 0, get request by requestID, if 1, get request by employeeID
         [HttpGet("RequestsAsync/{flag}/{id}/{type}")]// if flag is 2, get requests by type and EmployeeID.
-        public async Task<ActionResult<List<Request>>> RequestsAsync(int flag, Guid id, int type = -1)
+        public async Task<ActionResult<List<UpdatedRequestDto>>> RequestsAsync(int flag, Guid id, int type = -1)
         {
             // TODO create a new action method to fetch a request by it's id.
 
@@ -49,10 +48,16 @@ namespace ApiLayer.Controllers
             else
             {
                 //the flag is other than 0 or 1, get all requests of a specific type  by the employee
-                List<Request> requestList = await this._businessLayer.RequestsByEmpAndId(id, type);
+                List<UpdatedRequestDto> requestList = await this._businessLayer.RequestsByEmpAndType(id, type);
                 return Ok(requestList);
             }
+        }
 
+        [HttpGet("Request")]
+        public async Task<ActionResult<UpdatedRequestDto>> RequestById(Guid id)
+        {
+            UpdatedRequestDto r = await this._businessLayer.RequestById(id);
+            return Ok(r);
         }
 
         [HttpPut("UpdateRequestAsync")]
