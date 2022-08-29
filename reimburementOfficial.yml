@@ -70,6 +70,7 @@ stages:
 
 #testing tasks go there
 - stage: test
+  dependsOn: build
   jobs:
   - job: test_the_app
     #steps:
@@ -80,6 +81,7 @@ stages:
 
 #publish the app
 - stage: publish
+  dependsOn: build
   jobs:
   - job: publish_the_app
     steps:
