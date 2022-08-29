@@ -43,20 +43,20 @@ stages:
       inputs:
         versionSpec: 
         checkLatest: true
-    # - task: SonarCloudPrepare@1
-    #   inputs:
-    #     SonarCloud: '071822batch_SonarCloudServiceConnection'
-    #     organization: '071822dotnetbatch'
-    #     scannerMode: 'MSBuild'
-    #     projectKey: '071822dotnetbatch_071822batchtest'
-    #     projectName: '071822batchtest'
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: '071822batch_SonarCloudServiceConnection'
+        organization: '071822dotnetbatch'
+        scannerMode: 'MSBuild'
+        projectKey: '071822dotnetbatch_071822batchtest'
+        projectName: '071822batchtest'
 
 # this is the build stage        
-- stage: build
-  dependsOn: prep
-  jobs:
-  - job: job1
-    steps:
+# - stage: build
+#   dependsOn: prep
+#   jobs:
+#   - job: job1
+#     steps:
     - task: NuGetCommand@2
       displayName: restore_the_app
       inputs:
@@ -71,19 +71,12 @@ stages:
         workingDirectory: '$(workingDirectory)'
 
 #testing tasks go there
-- stage: test
-  dependsOn: build
-  jobs:
-  - job: test_the_app
-    steps:
+# - stage: test
+#   dependsOn: build
+#   jobs:
+#   - job: test_the_app
+#     steps:
     
-    - task: SonarCloudPrepare@1
-      inputs:
-        SonarCloud: '071822batch_SonarCloudServiceConnection'
-        organization: '071822dotnetbatch'
-        scannerMode: 'MSBuild'
-        projectKey: '071822dotnetbatch_071822batchtest'
-        projectName: '071822batchtest'
     - task: DotNetCoreCLI@2
       inputs:
         command: 'test'
@@ -99,11 +92,11 @@ stages:
     - task: SonarCloudAnalyze@1
 
 #publish the app
-- stage: publish
-  dependsOn: test
-  jobs:
-  - job: publish_the_app
-    steps:
+# - stage: publish
+#   dependsOn: test
+#   jobs:
+#   - job: publish_the_app
+#     steps:
     # publishing is optional but allows you to decorate the PRs later.
     - task: SonarCloudPublish@1
       inputs:
