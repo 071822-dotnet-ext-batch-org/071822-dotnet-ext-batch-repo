@@ -43,13 +43,13 @@ stages:
       inputs:
         versionSpec: 
         checkLatest: true
-    - task: SonarCloudPrepare@1
-      inputs:
-        SonarCloud: '071822batch_SonarCloudServiceConnection'
-        organization: '071822dotnetbatch'
-        scannerMode: 'MSBuild'
-        projectKey: '071822dotnetbatch_071822batchtest'
-        projectName: '071822batchtest'
+    # - task: SonarCloudPrepare@1
+    #   inputs:
+    #     SonarCloud: '071822batch_SonarCloudServiceConnection'
+    #     organization: '071822dotnetbatch'
+    #     scannerMode: 'MSBuild'
+    #     projectKey: '071822dotnetbatch_071822batchtest'
+    #     projectName: '071822batchtest'
 
 # this is the build stage        
 - stage: build
@@ -76,6 +76,14 @@ stages:
   jobs:
   - job: test_the_app
     steps:
+    
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: '071822batch_SonarCloudServiceConnection'
+        organization: '071822dotnetbatch'
+        scannerMode: 'MSBuild'
+        projectKey: '071822dotnetbatch_071822batchtest'
+        projectName: '071822batchtest'
     - task: DotNetCoreCLI@2
       inputs:
         command: 'test'
