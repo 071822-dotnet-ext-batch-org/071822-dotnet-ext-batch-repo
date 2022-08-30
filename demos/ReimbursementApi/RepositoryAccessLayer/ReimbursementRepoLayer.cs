@@ -1,10 +1,17 @@
-﻿using ModelsLayer;
+﻿using Microsoft.Extensions.Configuration;
+using ModelsLayer;
 using System.Data.SqlClient;
 
 namespace RepositoryAccessLayer
 {
     public class ReimbursementRepoLayer : IReimbursementRepoLayer
     {
+        private readonly IConfiguration _dbconnection;
+        public ReimbursementRepoLayer(IConfiguration x)
+        {
+            this._dbconnection = x;
+        }
+
         /// <summary>
         /// this method gets a request by type of request
         /// </summary>
@@ -12,7 +19,7 @@ namespace RepositoryAccessLayer
         /// <returns></returns>
         public async Task<List<Request>> RequestsAsync(int type)
         {
-            SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            SqlConnection conn1 = new SqlConnection(_dbconnection["ConnectionStrings:ReimbursementApiDb"]);
             using (SqlCommand command = new SqlCommand($"SELECT * FROM Request WHERE Status = @type", conn1))
             {
                 command.Parameters.AddWithValue("@type", type);// add dynamic data like this to protect against SQL Injection.
@@ -97,7 +104,7 @@ namespace RepositoryAccessLayer
         public async Task<UpdatedRequestDto> UpdatedRequestByIdAsync(Guid requestId)
         {
             SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-            using (SqlCommand command = new SqlCommand($"SELECT RequestID, FirstName, LastName, Status FROM [dbo].[Employees]" +
+            using (SqlCommand command = new SqlCommand($"SELECT RequestID, FirstName, LastName, Details, Status FROM [dbo].[Employees]" +
                 $" LEFT JOIN Request ON EmployeeID = FK_EmployeeId WHERE RequestID = @requestId", conn1))
             {
                 command.Parameters.AddWithValue("@requestId", requestId);// add dynamic data like this to protect against SQL Injection.
@@ -159,7 +166,8 @@ namespace RepositoryAccessLayer
 
         public async Task<List<UpdatedRequestDto>> RequestsByEmpAndType(Guid id, int type)
         {
-            SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            //SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            SqlConnection conn1 = new SqlConnection(_dbconnection["ConnectionStrings:ReimbursementApiDb"]);
             using (SqlCommand command = new SqlCommand($"SELECT RequestID, FirstName, LastName, Details, Status FROM [dbo].[Request]" +
                 $" LEFT JOIN Employees ON FK_EmployeeId = EmployeeID WHERE FK_EmployeeId = @id AND Status = @status", conn1))
             {

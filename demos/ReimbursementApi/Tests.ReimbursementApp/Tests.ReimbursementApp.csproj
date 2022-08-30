@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\RepositoryAccessLayer\RepositoryAccessLayer.csproj" />
     <ProjectReference Include="..\ModelsLayer\ModelsLayer.csproj" />
+    <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
   </ItemGroup>
 
 </Project>

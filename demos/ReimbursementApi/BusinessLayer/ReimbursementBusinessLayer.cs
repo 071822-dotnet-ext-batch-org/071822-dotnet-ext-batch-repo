@@ -1,6 +1,5 @@
 ﻿using ModelsLayer;
 using RepositoryAccessLayer;
-using ModelsLayer;
 
 namespace BusinessLayer
 {
@@ -19,7 +18,7 @@ namespace BusinessLayer
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<UpdatedRequestDto> RequestById(Guid id)
+        public async Task<UpdatedRequestDto> RequestByIdAsync(Guid id)
         {
             UpdatedRequestDto r = await this._repoLayer.UpdatedRequestByIdAsync(id);
             return r;

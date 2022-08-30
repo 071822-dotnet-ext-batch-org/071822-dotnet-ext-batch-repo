@@ -1,5 +1,6 @@
 using BusinessLayer;
 using RepositoryAccessLayer;
+using System.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IReimbursementBusinessLayer, ReimbursementBusinessLayer>();
 builder.Services.AddScoped<IReimbursementRepoLayer, ReimbursementRepoLayer>();
+var string1 = builder.Configuration["ConnectionStrings:ReimbursementApiDb"];
 
 var app = builder.Build();
 
