@@ -11,26 +11,31 @@ namespace Tests.ReimbursementApp
     {
         public async Task<bool> IsManagerAsync(Guid employeeID)
         {
+            await Task.Delay(100);
             throw new NotImplementedException();
         }
 
         public async Task<List<Request>> RequestsAsync()
         {
+            await Task.Delay(100);
             throw new NotImplementedException();
         }
 
         public async Task<List<Request>> RequestsAsync(int type)
         {
+            await Task.Delay(100);
             throw new NotImplementedException();
         }
 
         public async Task<List<UpdatedRequestDto>> RequestsByEmpAndType(Guid id, int type)
         {
+            await Task.Delay(100);
             throw new NotImplementedException();
         }
 
-        public Task<List<global::ModelsLayer.UpdatedRequestDto>> RequestsByEmpIdAsync(Guid id)
+        public async Task<List<UpdatedRequestDto>> RequestsByEmpIdAsync(Guid id)
         {
+            await Task.Delay(100);
             throw new NotImplementedException();
         }
 
@@ -41,16 +46,15 @@ namespace Tests.ReimbursementApp
         /// <returns></returns>
         public async Task<UpdatedRequestDto> UpdatedRequestByIdAsync(Guid requestId)
         {
-            throw new NotImplementedException();
-            //  UpdatedRequestDto dto = new UpdatedRequestDto
-            // {
-            //     Details = "this is a mock"
-            // };
-            // return dto;
+            // throw new NotImplementedException();
+            await Task.Delay(100);
+            UpdatedRequestDto dto = new UpdatedRequestDto(requestId, "Mark", "Moore", "It's Mark Moore", 4);
+            return dto;
         }
 
         public async Task<UpdatedRequestDto> UpdateRequestAsync(Guid requestId, int status)
         {
+            await Task.Delay(100);
             throw new NotImplementedException();
         }
     }

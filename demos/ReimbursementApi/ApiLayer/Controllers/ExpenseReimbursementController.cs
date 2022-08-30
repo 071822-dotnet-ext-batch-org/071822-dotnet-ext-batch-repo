@@ -20,9 +20,10 @@ namespace ApiLayer.Controllers
         /// Get all requests of a specified type
         /// </summary>
         /// <returns></returns>
+        // The 2 attributes below are examples of 'Attribute Routing'
         [HttpGet("RequestsAsync")]//get all requests .
         [HttpGet("RequestsAsync/{type}")]//get a specific request
-        //[HttpGet("RequestsAsync/{id?}")]//get all of a type of request
+        // '[HttpPost]' is an example of a conventional routing attribute. In conventional routing, the name of hte method is used for the routing.
         public async Task<ActionResult<List<Request>>> RequestsAsync(int type = -1)
         {
             List<Request> requestList = await this._businessLayer.RequestsAsync(type);// this method gets a request by type of request
@@ -56,7 +57,7 @@ namespace ApiLayer.Controllers
         [HttpGet("Request")]
         public async Task<ActionResult<UpdatedRequestDto>> RequestById(Guid id)
         {
-            UpdatedRequestDto r = await this._businessLayer.RequestById(id);
+            UpdatedRequestDto r = await this._businessLayer.RequestByIdAsync(id);
             return Ok(r);
         }
 
@@ -76,5 +77,5 @@ namespace ApiLayer.Controllers
 
 
 
-    }
-}
+    }//EoC
+}//EoN
