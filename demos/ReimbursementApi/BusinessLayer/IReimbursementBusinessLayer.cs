@@ -4,6 +4,7 @@ namespace BusinessLayer
 {
     public interface IReimbursementBusinessLayer
     {
+        Task<EmployeePublic> RegisterAsync(EmployeeRegisterDto ep);
         Task<UpdatedRequestDto> RequestByIdAsync(Guid id);
         Task<List<Request>> RequestsAsync(int type);
         Task<List<UpdatedRequestDto>> RequestsByEmpAndType(Guid id, int type);
