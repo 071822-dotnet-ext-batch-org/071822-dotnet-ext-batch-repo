@@ -15,6 +15,38 @@ namespace ApiLayer.Controllers
             this._businessLayer = rbl;
         }
 
+
+        /// <summary>
+        /// Accepts a EmployeeRegisterDto as an argument and passes the object to the Business Layer
+        /// Returns an 201-employeePublic object if successful
+        /// if not successful, returns 302 - Found to indicate that there is already a user in the Db with that username/password combo.
+        /// </summary>
+        /// <param name="ep"></param>
+        /// <returns></returns>
+        [HttpPost("registerasync")]
+        public async Task<ActionResult<EmployeePublic>> RegisterAsync(EmployeeRegisterDto ep)
+        {
+            // Call the business layer method ot register the new user. 
+            // Make sure the users email/password combo is not already in the system.
+            if (ModelState.IsValid)
+            {
+                EmployeePublic ep1 = await this._businessLayer.RegisterAsync(ep);
+                if (ep1 != null)
+                {
+                    return Created("https://www.localhost:7402/ExpenseReimbursement/TODO", ep1);
+                }
+                else
+                {
+                    return BadRequest("That user already exists in the DataBase.");
+                }
+            }
+            else
+            {
+                return BadRequest("The model was not validated");
+            }
+        }
+
+
         /// <summary>
         /// Get all requests.
         /// Get all requests of a specified type

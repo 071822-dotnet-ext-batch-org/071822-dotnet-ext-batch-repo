@@ -83,5 +83,31 @@ namespace BusinessLayer
             else return null;
         }
 
+        /// <summary>
+        /// This method varifies if a username and password combination is already in the db.
+        /// If so, returns null
+        /// if not, wil insert the new user, with a unique identifier into the Db.
+        /// </summary>
+        /// <param name="ep"></param>
+        /// <returns></returns>
+        public async Task<EmployeePublic> RegisterAsync(EmployeeRegisterDto ep)
+        {
+            // check if the user is already in the Db.
+            bool exists = await this._repoLayer.UserNamePassWordExists(ep.Email, ep.password);
+            if (exists)
+            {
+                return null;
+            }
+            else
+            {
+                //insert the user into the Db with a new Guid.
+                Guid guid = Guid.NewGuid();
+                EmployeePublic ep1 = await this._repoLayer.InsertNewEmployee(guid, ep);
+                return ep1;
+
+            }
+
+        }
+
     }//EoC
 }//EoN

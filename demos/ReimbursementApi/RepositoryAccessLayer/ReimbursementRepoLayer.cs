@@ -12,6 +12,25 @@ namespace RepositoryAccessLayer
             this._dbconnection = x;
         }
 
+        public async Task<bool> UserNamePassWordExists(string email, string password)
+        {
+            SqlConnection conn1 = new SqlConnection(_dbconnection["ConnectionStrings:ReimbursementApiDb"]);
+            using (SqlCommand command = new SqlCommand($"SELECT * FROM Employees WHERE Email = @email AND Password = @password", conn1))
+            {
+                command.Parameters.AddWithValue("@email", email);// add dynamic data like this to protect against SQL Injection.
+                command.Parameters.AddWithValue("@password", password);
+                conn1.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                if (ret.Read())
+                {
+                    conn1.Close();
+                    return true;
+                }
+                conn1.Close();
+                return false;
+            }
+        }
+
         /// <summary>
         /// this method gets a request by type of request
         /// </summary>
@@ -183,6 +202,50 @@ namespace RepositoryAccessLayer
                 }
                 conn1.Close();
                 return list;
+            }
+        }
+
+
+        public async Task<EmployeePublic> InsertNewEmployee(Guid guid, EmployeeRegisterDto ep)
+        {
+            SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            using (SqlCommand command = new SqlCommand($"INSERT INTO Employees (EmployeeID,FirstName,LastName,IsManager,Email,Password) VALUES(@e, @f, @l, @i, @em, @p)", conn1))
+            {
+                command.Parameters.AddWithValue("@e", guid);// add dynamic data like this to protect against SQL Injection.
+                command.Parameters.AddWithValue("@f", ep.FirstName);
+                command.Parameters.AddWithValue("@l", ep.LastName);
+                command.Parameters.AddWithValue("@i", ep.IsManager);
+                command.Parameters.AddWithValue("@em", ep.Email);
+                command.Parameters.AddWithValue("@p", ep.password);
+                conn1.Open();
+                int ret = await command.ExecuteNonQueryAsync();
+                if (ret == 1)
+                {
+                    conn1.Close();
+                    EmployeePublic urbi = await this.EmployeeById(guid);
+                    return urbi;
+                }
+                conn1.Close();
+                return null;
+            }
+        }
+
+        private async Task<EmployeePublic> EmployeeById(Guid guid)
+        {
+            SqlConnection conn1 = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            using (SqlCommand command = new SqlCommand($"SELECT firstName, lastName, isManager, email FROM Employees WHERE EmployeeID = @id", conn1))
+            {
+                command.Parameters.AddWithValue("@id", guid);// add dynamic data like this to protect against SQL Injection.
+                conn1.Open();
+                SqlDataReader? ret = await command.ExecuteReaderAsync();
+                if (ret.Read())
+                {
+                    EmployeePublic ep = new EmployeePublic(ret.GetString(0), ret.GetString(1), ret.GetBoolean(2), ret.GetString(3));
+                    conn1.Close();
+                    return ep;
+                }
+                conn1.Close();
+                return null;
             }
         }
     }// EoC

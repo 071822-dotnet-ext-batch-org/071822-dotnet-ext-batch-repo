@@ -42,7 +42,8 @@ namespace Tests.ReimbursementApp
             // Arrange
             Guid guid = Guid.NewGuid();
             //create the instance of the business layer
-            ReimbursementBusinessLayer bl = new ReimbursementBusinessLayer(new Mock_RepoLayer());
+            Mock_RepoLayer m = new Mock_RepoLayer();
+            ReimbursementBusinessLayer bl = new ReimbursementBusinessLayer(m);
 
             // Act
             // Employee dto = new Employee(guid, "firstName", "lastName", true, "email", "password");
