@@ -18,7 +18,7 @@ namespace ModelsLayer
             Email = email;
         }
 
-        [Range(4, 10)]
+        [StringLength(10, MinimumLength = 4)]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool IsManager { get; set; }

@@ -240,8 +240,9 @@ namespace RepositoryAccessLayer
                 SqlDataReader? ret = await command.ExecuteReaderAsync();
                 if (ret.Read())
                 {
+                    EmployeePublic ep = new EmployeePublic(ret.GetString(0), ret.GetString(1), ret.GetBoolean(2), ret.GetString(3));
                     conn1.Close();
-                    return new EmployeePublic(ret.GetString(0), ret.GetString(1), ret.GetBoolean(2), ret.GetString(3));
+                    return ep;
                 }
                 conn1.Close();
                 return null;
