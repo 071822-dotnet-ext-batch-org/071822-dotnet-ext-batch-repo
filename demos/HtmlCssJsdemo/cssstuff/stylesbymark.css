@@ -1,0 +1,122 @@
+p {
+  color: blueviolet;
+}
+
+.h1-class {
+  background-color: greenyellow;
+  width: 200px;
+}
+
+.h1-class2 {
+  /* background-color: greenyellow;
+  width: 200px; */
+  border: solid brown;
+  border-width: 5px 10px 15px 20px;
+  /* border-right: 100px; */
+}
+
+.h2-class {
+  background-color: azure;
+  border: solid brown;
+}
+
+#h3-id {
+  background-color: bisque;
+}
+
+ul {
+  background-color: aqua;
+}
+
+ul #ulli {
+  /* Hex code is up to 15 0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f */
+  background-color: #f70505ff;
+}
+
+body {
+  background-color: bisque;
+}
+
+h5,
+h3 {
+  border: double black;
+  border-width: 5px;
+}
+
+/* concatenation means these selectors ll on the same element */
+ol.oli {
+  font-size: 40px;
+}
+
+/* descendent selector applies the styling to any nested element */
+ol .oli1 {
+  font-size: 10px;
+}
+
+li#adjSibling+li {
+  border-top: solid brown 15px;
+}
+
+p.pclass~h1 {
+  font-weight: bold;
+}
+
+h1>span {
+  background-color: crimson;
+}
+
+.mm {
+  width: 20mm;
+  border: solid black 3px;
+}
+
+.cm {
+  width: 20cm;
+  border: solid black 3px;
+}
+
+.inches {
+  width: 20in;
+  border: solid black 3px;
+}
+
+.points {
+  width: 20pt;
+  border: solid black 3px;
+}
+
+.picas {
+  width: 20pc;
+  border: solid black 3px;
+}
+
+.em {
+  width: 20em;
+  border: solid black 3px;
+}
+
+.rem {
+  width: 20rem;
+  border: solid black 3px;
+}
+
+.vh {
+  width: 100vh;
+  border: solid black 3px;
+}
+
+.vw {
+  width: 10vw;
+  height: 10vh;
+  border: solid black 3px;
+}
+
+.box {
+  width: 300px;
+  border: dashed green 20px;
+  padding: 20px;
+  margin: auto;
+  text-align: right;
+  /* text align is fo the content itself NOT the element */
+  justi
+}

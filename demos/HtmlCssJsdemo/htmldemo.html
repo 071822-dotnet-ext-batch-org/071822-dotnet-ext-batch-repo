@@ -6,9 +6,140 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Marks HTML Doc</title>
+  <link rel="stylesheet" href="cssstuff/stylesbymark.css">
+  <style>
+    p {
+      color: green;
+    }
+  </style>
 </head>
 
 <body>
+  This is text without any decoration!<p style="color:aqua">This is a <strong><em>bold </em></strong>paragraph</p>
+  <div>A div created a vertical allocation of the page where nothing will be printed to the right o the contents.</div>
+  more text
+  </br>this is text</br>this is
+  more text</br></br>
+  this is more text
+  <span>this is a span. Span is used to separate our a set of code for targeting by JS or CSS</span>
+  <br><b>this is bold</b>
+  <br><i>italicized</i>
+  <br><del>this text is deleted</del>
+  <ins>this is inserted text</ins>
+  </br>
+  <sub>subscript</sub>
+  <sup><sub>middlescript text</sub></sup>
+  <sup>superscript text</sup>
+  <sup><sup>super-duper-script text</sup></sup>
+
+  <!-- an class can be repeated in the document -->
+  <h1 class="h1-class h1-class2">header1</h1>
+  <h2 class="h2-class">header2</h2>
+  <!-- an id attribute must (by convention) be unique within the document. -->
+  <h3 id="h3-id">header 3</h3>
+  <h4 id="h3-id">header 4</h4>
+  <h5>header 5</h5>
+  <h6>header 6</h6>
+
+  <a href="https://wordpress.com/forums/topic/how-to-open-custom-html-link-to-open-in-new-tab/#:~:text=you%20no%20longer%20have%20to%20edit"
+    target="_blank">w3schools Link</a>
+  <br>
+  <img width="25%" src="./128956487_1574409422767464_4545761392203570497_n.jpg" alt="Image can't be found">
+
+  <ul>
+    <li>first item</li>
+    <li id="ulli">2nd item</li>
+    <li>3rd item</li>
+    <li>4th item</li>
+    <li>5th item</li>
+  </ul>
+
+  <ol class="oli">
+    <li>first item</li>
+    <li>2nd item</li>
+    <li>3rd item</li>
+    <li class="oli1">
+      <ol>
+        <li>sub element</li>
+      </ol>
+    </li>
+    <li>5th item</li>
+  </ol>
+
+  <table>
+    <thead>
+      <th style="width: 100px;">First Name</th>
+      <th>Last Name</th>
+      <th>Address</th>
+      <th>Age</th>
+    </thead>
+    <tbody class="employeesList">
+      <tr style="width: 60px;">
+        <td style="text-align: center;">Mark</td>
+        <td>Moore</td>
+        <td>111 Main</td>
+        <td>43</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <form action="" method="get" style="border: solid brown; border-width: 5px; width: 50%;">
+    <label for="fname" style="padding-left: 20px;">First Name:</label>
+    <input type="text" id="fname" placeholder="first name" class="employeesList" autofocus> <br>
+    <label for="lname">Last Name:</label>
+    <input type="text" id="lname" placeholder="last name" class="lnameClass"><br>
+    <select name="marksbestguess" id="">
+      <option value="0">Rock</option>
+      <option value="1" selected>Paper</option>
+      <option value="2">Scissors</option>
+    </select><br>
+    <label for="emailme">Do you want an &commat; OR a &#62 OR a &#x2198;?</label>
+    <input type="checkbox" name="emailme" id="">
+    <input type="email" name="emailme" id="" placeholder="your email" readonly>
+    <input type="color" name="" id="">
+    <input type="date" name="dateme" id="datetime">
+    <button type="submit">Submit</button>
+  </form>
+
+  <a href="https://www1.nyc.gov/">New York City</a>
+
+  <ol id="adjSibling">
+    <li id="adjSibling">first item</li>
+    <li>2nd item</li>
+    <li>3rd item</li>
+    <li>
+      <ol>
+        <li>sub element</li>
+      </ol>
+    </li>
+    <li>5th item</li>
+  </ol>
+
+  <p class="pclass"> I'm a paragraph</p>
+  <h1>I'm an h1</h1>
+  <h4>I'm an h2</h4>
+  <h1>I'm an h1...
+    <span>I'm a span!</span>...
+  </h1>
+
+  <p class="mm">I"m mm</p>
+  <p class="cm">I"m cm</p>
+  <p class="inches">I"m inches</p>
+  <p class="points">I"m points</p>
+  <p class="picas">I"m picas</p>
+  <p class="em">I"m em</p>
+  <p class="rem">I"m rem</p>
+  <p class="vh">I"m vh</p>
+  <p class="vw">I"m vw</p>
+
+  <p class="box">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum minima molestias culpa rerum officiis, id
+    ex,
+    quibusdam in deserunt similique, quas harum expedita ea nostrum! Placeat dolores est omnis earum. Lorem ipsum dolor
+    sit amet consectetur adipisicing elit. Repellat dicta quis sit molestiae temporibus doloremque sapiente alias optio
+    quasi inventore? Tempora eaque adipisci sint dolorem quod, beatae quam doloremque illum? Lorem, ipsum dolor sit amet
+    consectetur adipisicing elit. Non rem deleniti distinctio magni possimus perspiciatis eius, fugit totam repudiandae?
+    Voluptatem minima dolorum, soluta quam optio repudiandae culpa placeat facere. Explicabo.</p>
+
 
 </body>
 
