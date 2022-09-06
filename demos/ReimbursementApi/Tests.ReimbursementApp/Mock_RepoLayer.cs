@@ -9,6 +9,11 @@ namespace Tests.ReimbursementApp
 {
     public class Mock_RepoLayer : IReimbursementRepoLayer
     {
+        public Task<EmployeePublic> InsertNewEmployee(Guid guid, EmployeeRegisterDto ep)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> IsManagerAsync(Guid employeeID)
         {
             await Task.Delay(100);
@@ -55,6 +60,11 @@ namespace Tests.ReimbursementApp
         public async Task<UpdatedRequestDto> UpdateRequestAsync(Guid requestId, int status)
         {
             await Task.Delay(100);
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UserNamePassWordExists(string email, string password)
+        {
             throw new NotImplementedException();
         }
     }
