@@ -76,17 +76,16 @@ class Program
             if (i.GetMembers() != null)
             {
                 //get all the types members
-                MethodInfo[] members = i.GetMethods();
+                MethodInfo[] members = i.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static);
                 // iterate over the member and , if it has the method we're looking for, and that method is parameterless, Invoke it.
                 foreach (MethodInfo ii in members)
                 {
-                    if (ii.Name == "GetMyAge" && ii.GetParameters().Length == 0)
+                    if (ii.Name == "GetMyNameAndAge" && ii.GetParameters().Length > 0)
                     {
-                        var classInstance = Activator.CreateInstance(typeof(First1));
-                        // object? age = ii.Invoke(new First1(), null);
-                        object? age = ii.Invoke(classInstance, null);
-
-                        Console.WriteLine($"\tThe return from GetMyAge() is {(int)age}\n");
+                        var classInstance = Activator.CreateInstance(typeof(First1));//
+                        // object? age = ii.Invoke(new First1(), null);//if your method has 0 parameters
+                        object? age = ii.Invoke(classInstance, new object[] { 45, "arg2" });// you can run methods with 1+ parameters using reflection.
+                        Console.WriteLine($"\tThe return from GetMyAge() is {(string)age}\n");
                     }
                 }
             }
@@ -94,5 +93,10 @@ class Program
 
 
         #endregion
+
+
+
+        First1 f1 = new First1();
+        f1.GetMyAge();
     }
 }

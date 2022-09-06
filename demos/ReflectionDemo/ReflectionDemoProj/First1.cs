@@ -28,9 +28,14 @@ namespace ReflectionDemoProj
             return this.Name;
         }
 
-        private string GetMyNameAndAge()
+        private string GetMyNameAndAge(int x, string y)
         {
-            return $"{this.Name}'s age is {this.Age}";
+            return $"{y}'s age is {x}";
+        }
+
+        public static void mystaticmethod()
+        {
+
         }
     }
 }
