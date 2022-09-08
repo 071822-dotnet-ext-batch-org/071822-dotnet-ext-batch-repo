@@ -118,5 +118,8 @@ h1>span {
   margin: auto;
   text-align: right;
   /* text align is fo the content itself NOT the element */
-  justi
+}
+
+.redBackground {
+  background-color: red;
 }

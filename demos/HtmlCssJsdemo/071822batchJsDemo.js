@@ -166,7 +166,130 @@ console.log(`mynested returned ${mynested1()}`);
 console.log(`mynested returned ${mynested1()}`);
 console.log(`mynested returned ${mynested1()}`);
 
+let m1 = {
+  name1: 'Mark',
+  age: 43,
+}
+// you can add a function after the creation of the object.
+// arrow function doesn't work... for some reason
+m1.myDeets = function () {
+  return `${this.name1} is ${this.age} years oooold.`
+}
+console.log(m1.myDeets());//then call it
 
+let m3 = class m2 {
+  constructor(name, age) {
+    this.name1 = name;
+    this.age = age;
+  }
+};
+let m4 = new m3('Jim', 18);
+console.log(m4.age, m4.name1, m3.name);
+let m5 = new m3('Arely', 40);
+console.log(m5.age, m5.name1);
+
+class m6 {
+  constructor(name = 'Mac', age = 11) {
+    this.name1 = name;
+    this.age = age;
+    this.incTheCounter();
+  }
+
+  incTheCounter = function () {
+    this.count += this.count;
+  }
+
+  get nameAndAge() {
+    return `${this.name1} is ${this.age} years oooold.`
+  }
+
+  set setage(v) {
+    if (v > 100 || v < 1) throw new RangeError(`That age, ${v} is invalid`);
+    else this.age = v;
+  }
+  //section below is all static members.
+  static count = 0;
+  static staticName = 'Mac';//create a static property
+  static gimmeStatic() {// static functions can only access static properties.
+    ++this.count;
+    return `Do you wanna get jammed up ${this.count} times, ${this.staticName}?`
+  }
+};
+
+let m7 = new m6('Mominur', 30);
+console.log(m7.nameAndAge);
+m7.setage = 25;
+console.log(m7.nameAndAge);
+// m7.setage = 125;// set a valid that will throw the error.
+console.log(m6.gimmeStatic());
+
+let m8 = new m6();
+console.log(m8.name1, m8.age);
+
+let m9 = new m6('Dave');
+console.log(m9.name1, m9.age);
+
+class m6Inheriting extends m6 {
+  constructor(myName, page, address = '112 Main Blvd.') {
+    super(myName, page);
+    this.address = address;
+  };
+};
+
+let n1 = new m6Inheriting('Larry', 37);
+console.log(`My best friend ${n1.name1} is ${n1.age} years young and lives at ${n1.address}`);
+// console.log(`The ${m6.gimmeStatic()}`);
+// console.log(`The ${m6.gimmeStatic()}`);
+// console.log(`The ${m6.gimmeStatic()}`);
+// console.log(`The ${m6.gimmeStatic()}`);
+// console.log(`The ${m6.gimmeStatic()}`);
+console.log(`The counteris => ${m6.count}`);
+
+// I think this connection to the html is dynamic... so when we add <p> elements to the html
+// the HtmlCollection gets bigger... so we end up in an infinite loop.
+let paras = document.getElementsByTagName('p');
+
+//copy all elements to a new array
+let myArray = [];
+for (let i = 0; i < paras.length; i++) {
+  myArray.push(paras[i]);
+}
+let bodie = document.body;
+let mydiv = document.createElement("div");
+bodie.appendChild(mydiv);
+let counter = 0;
+let myelem = 'div'
+for (let p1 of myArray) {
+  counter++;
+  mydiv.innerHTML += `<${myelem}>${counter} - ${p1.textContent}</${myelem}}>`;
+}
+
+// for (let p1 of myArray) {
+//   counter++;
+//   let newP = document.createElement('p');
+//   newP.innerText = `${counter} - ${p1.innerText}`;
+//   mydiv.appendChild(newP);
+// }
+
+const list = document.querySelector('.oli');
+console.log(list.lastElementChild.textContent);
+// list.lastElementChild.classList.add("redBackground");
+let button = document.querySelector("button");
+button.addEventListener('click', (e) => {
+  e.stopPropagation();
+  // dynamically apply and remove the classList
+  let elem = list.lastElementChild;
+  if (elem.classList.contains("redBackground")) {
+    elem.classList.remove('redBackground');
+  }
+  else {
+    list.lastElementChild.classList.add("redBackground");
+  }
+});
+
+function HeBitMe() {
+  console.log('Charlie, bit me!!!');
+}
 
 
 
