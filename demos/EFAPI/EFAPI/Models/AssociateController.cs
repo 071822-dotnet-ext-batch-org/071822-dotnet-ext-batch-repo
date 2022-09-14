@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace EFAPI.Models
 {
@@ -18,7 +18,7 @@ namespace EFAPI.Models
         [HttpGet]
         public async Task<ActionResult<List<Associate>>> GetAll()
         {
-            return Ok( _context.Associates.ToList());
+            return Ok(await _context.Associates.ToListAsync());
         }
 
         [HttpGet("{id}")]
@@ -36,7 +36,7 @@ namespace EFAPI.Models
             _context.Associates.Add(newAssociate);
             await _context.SaveChangesAsync();
 
-            return Ok(_context.Associates.ToList());
+            return Ok(await _context.Associates.ToListAsync());
         }
 
         [HttpPut]
@@ -53,7 +53,7 @@ namespace EFAPI.Models
 
             await _context.SaveChangesAsync();
 
-            return Ok( _context.Associates.ToList());
+            return Ok(await _context.Associates.ToListAsync());
         }
 
         [HttpDelete]
@@ -67,7 +67,7 @@ namespace EFAPI.Models
             _context.Associates.Remove(associate);
             await _context.SaveChangesAsync();
 
-            return Ok(_context.Associates.ToList());
+            return Ok(await _context.Associates.ToListAsync());
         }
     }
 }
