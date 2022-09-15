@@ -1,0 +1,8 @@
+<nav>
+    <ul>
+        <li><a routerLink="/" routerLinkActive="active">Home</a></li>
+        <li><a routerLink="/associates" routerLinkActive="active" *ngIf="auth.user$ | async as user">Associates</a></li>
+        <li><a routerLink="/user" routerLinkActive="active" *ngIf="auth.user$ | async as user">{{ user.name }}</a></li>
+        <li><app-auth-button></app-auth-button></li>
+    </ul>
+</nav>

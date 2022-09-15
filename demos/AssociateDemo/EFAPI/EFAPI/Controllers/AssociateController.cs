@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EFAPI.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace EFAPI.Models
+namespace EFAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -16,6 +18,7 @@ namespace EFAPI.Models
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<Associate>>> GetAll()
         {
             return Ok(await _context.Associates.ToListAsync());
@@ -57,6 +60,7 @@ namespace EFAPI.Models
         }
 
         [HttpDelete]
+        [Authorize]
         public async Task<ActionResult<List<Associate>>> DeleteAssociate(int id)
         {
             var associate = await _context.Associates.FindAsync(id);

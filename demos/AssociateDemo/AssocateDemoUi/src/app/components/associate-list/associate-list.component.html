@@ -1,0 +1,9 @@
+<div>
+    <h1>Associates</h1>
+    <ul>
+        <li *ngFor="let associate of associates">
+            <h3>{{ associate.id }}: {{ associate.firstMidName }}</h3>
+            <h4>{{ associate.dob | date: "MM/dd/YY" }} </h4>
+        </li>
+    </ul>
+</div>
