@@ -113,3 +113,14 @@ steps:
 #     appType: 'webApp'
 #     WebAppName: 'memesaver'
 #     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Free Trial(869ec894-618e-45ae-bdc1-62450b97e1ec)'
+    appType: 'webApp'
+    WebAppName: '071822personalsite'
+    # deployToSlotOrASE: true
+    # ResourceGroupName: '071822test_RG'
+    # SlotName: 'production'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
