@@ -1,5 +1,6 @@
-CONFLICT GOES HERE! this is a new text file..ha.ha.ha.ha..
+this is marks change to the file...ha.ha.ha.ha..CONFLICT
 NO! it's a newer text file.
 No NO NO! it's mine!
 
 MORE CONFLICTS!!
+-- adding another superfluous comment
