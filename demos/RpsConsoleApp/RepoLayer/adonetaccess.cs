@@ -105,8 +105,8 @@ namespace RepoLayer
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public async Task<int> InsertNewPlayerAsync(Player p)
-        {
+        /// public async Task<int> InsertNewPlayerAsync(Player p)
+        /// {
             SqlConnection conn = new SqlConnection("Server=tcp:p1rebuild.database.windows.net,1433;Initial Catalog=071822_batch_Db;Persist Security Info=False;User ID=p1rebuild;Password=Have1pie;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             using (SqlCommand command = new SqlCommand($"INSERT INTO Players VALUES (@playerId, @fname, @lname, @wins, @losses)", conn))
             {
@@ -132,7 +132,7 @@ namespace RepoLayer
         }
 
         /// <summary>
-        /// This method will check if the player is in the Db and 
+        /// This method will check if the player is in the Db and
         /// return the player object, if it exists
         /// if not, returns null.
         /// </summary>

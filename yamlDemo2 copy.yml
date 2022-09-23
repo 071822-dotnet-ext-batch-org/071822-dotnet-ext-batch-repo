@@ -1,0 +1,84 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+# normally, you can 
+# trigger:
+# - main
+
+pr: none
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - demos/ReimbursementApi
+
+pool:
+  vmImage: ubuntu-latest
+
+#stages run sequentially
+stages:
+- stage: build
+#jobs run in parallel (asynchronously)
+  jobs:
+  - job: build_job1
+    steps:
+    #a script is a task , which is tha smallests unit of the pipeline
+    - script: echo Hello, world!
+      displayName: 'Run a one-line script'
+    - script: |
+        echo Add other tasks to build, test, and deploy your project.
+        echo My name is Earl!
+      displayName: 'Run a multi-line script'
+  - job: build_job2 # yo can give names to each unit
+  # use dependsOn to force one job to wait till another job is finished.
+    dependsOn: build_job1
+    steps:
+    - script: echo This is job2
+      displayName: 'Run a one-line script' #you can give a name that will show in the lest hand panel in the build screen...
+    - script: |
+        echo Add other tasks to build, test, and deploy your project.
+      displayName: 'Run a multi-line script'
+
+- stage: test
+  jobs:
+  - job: test_job1
+    steps:
+    - script: echo Hello, world!
+      displayName: 'Run a one-line script'
+    - script: |
+        echo Add other tasks to build, test, and deploy your project.
+        echo My name is Earl!
+      displayName: 'Run a multi-line script'
+  - job: test_job2
+    dependsOn:
+    steps:
+    - script: echo This is job2
+      displayName: 'Run a one-line script'
+    - script: |
+        echo Add other tasks to build, test, and deploy your project.
+      displayName: 'Run a multi-line script'
+- stage: deploy
+  dependsOn: build
+  jobs:
+  - job: deploy_job1
+    steps:
+    - script: echo Hello, I\'m deploy job1!
+      displayName: 'deploy stage'
+    - script: echo The job status is $(Agent.JobStatus)
+      displayName: 'printing out the job status'
+    - bash: | 
+        echo  The access token is $(System.AccessToken), the agent build dir is $(Agent.BuildDirectory)
+        echo The job status is $(Agent.JobStatus)
+      displayName: 'Run a multi-line bash script'
+  - job: deploy_job2
+    dependsOn: deploy_job1
+    steps:
+    - script: echo This is deplopy.job2
+      displayName: 'Run a one-line script'
+    - script: |
+        echo Add other tasks to build, test, and deploy your project.
+      displayName: 'Run a multi-line script showing the job status $(Agent.JobStatus)'

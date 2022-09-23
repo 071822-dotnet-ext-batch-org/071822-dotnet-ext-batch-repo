@@ -1,0 +1,38 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  one: initialValue
+  environ: Its a dev environ
+
+# stages:
+# - stage: build
+#   jobs:
+#   - job:
+#     steps:
+#     - script: echo my stuff is $(one) and $(environ)
+
+stages:
+- stage: Build
+#add a jobs section and the first job will hold the steps(Tasks)
+#jobs holds a list of job, job, job,....
+  jobs:
+  - job: Job1
+    #step and task mean the same thing.
+    steps:
+    - script: echo Job 1 - Hello, $(environ)!
+      displayName: '1 -Run a one-line script'
+
+    # a multiline script
+    - script: |
+        echo Add other tasks to build, test, and deploy your project.
+        echo See https://aka.ms/yaml
+      displayName: 'Run a multi-line script'

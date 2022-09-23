@@ -1,3 +1,5 @@
-this is a new text file..ha.ha.ha.ha..
+CAUSING A MERGE CONFLICT! this is a new text file..ha.ha.ha.ha..
 NO! it's a newer text file.
-No NO NO! it's mine!
+No NO NO! it's mine
+
+MY NAME IS LARRY!
