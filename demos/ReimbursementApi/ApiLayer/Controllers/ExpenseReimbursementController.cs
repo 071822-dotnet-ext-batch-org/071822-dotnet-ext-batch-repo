@@ -15,7 +15,6 @@ namespace ApiLayer.Controllers
             this._businessLayer = rbl;
         }
 
-
         /// <summary>
         /// Accepts a EmployeeRegisterDto as an argument and passes the object to the Business Layer
         /// Returns an 201-employeePublic object if successful
